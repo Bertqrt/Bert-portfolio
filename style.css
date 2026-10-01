@@ -793,7 +793,8 @@ html:not(.js) .drawer-inner { visibility: visible; }
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-top: 8px;
 }
 
 .bench-log-title {
