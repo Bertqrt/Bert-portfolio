@@ -528,17 +528,18 @@ button:focus-visible {
   pointer-events: none;
 }
 
+.pulse { height: 6px; margin-top: -2px; }
+
+/* A bright 14px spot at the right end of a full-width strip; moving the strip
+   with transform keeps the animation on the GPU (smooth on phones) */
 .pulse::before {
   content: "";
   position: absolute;
-  top: -2px;
-  left: -14px;
-  width: 14px;
-  height: 6px;
+  inset: 0;
+  background: linear-gradient(90deg, transparent calc(100% - 14px), var(--copper) calc(100% - 14px));
   border-radius: 3px;
-  background: var(--copper);
-  box-shadow: 0 0 10px var(--copper);
   opacity: 0;
+  transform: translateX(-100%);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -549,8 +550,8 @@ button:focus-visible {
 }
 
 @keyframes current {
-  0% { left: -14px; opacity: 1; }
-  100% { left: 100%; opacity: 1; }
+  0% { transform: translateX(-100%); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 1; }
 }
 
 /* ---------- Home: featured + writing ---------- */
@@ -1613,3 +1614,67 @@ html:not(.js) .chapter::before {
 @media (max-height: 450px) {
   .site-header { position: static; }
 }
+
+/* ---------- Little animations ----------
+   Only transform, opacity, stroke and clip are animated so phones can run
+   them on the GPU. Everything sits behind prefers-reduced-motion. */
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Smooth fade between pages; the header stays put */
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation-duration: 0.25s; }
+  .site-header { view-transition-name: site-header; }
+
+  /* The chip powers up: traces draw out to each pin, vias light, then one
+     pulse of current runs along every trace */
+  .pads li:nth-child(1) .pad { --d: 0s; }
+  .pads li:nth-child(2) .pad { --d: 0.12s; }
+  .pads li:nth-child(3) .pad { --d: 0.24s; }
+  .pads li:nth-child(4) .pad { --d: 0.36s; }
+
+  .js .pad::before {
+    transition: opacity 0.2s ease, transform 0.5s cubic-bezier(0.3, 0.7, 0.2, 1) var(--d);
+  }
+  .js .pad::after {
+    transition: background-color 0.2s ease, transform 0.35s cubic-bezier(0.3, 1.5, 0.5, 1) calc(var(--d) + 0.35s);
+  }
+  .js .board:not(.powered) .pad::before { transform: scaleX(0); }
+  .js .board:not(.powered) .pad::after { transform: scale(0); }
+  .board.powered .pulse::before { animation: current 0.6s linear calc(var(--d) + 0.6s) 1; }
+
+  /* Hero: the highlight sweeps in, then "that's me" is written and the arrow drawn */
+  .lede .hl {
+    background-repeat: no-repeat;
+    animation: sweep 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.45s both;
+  }
+  .note { animation: write 0.6s steps(12, end) 0.9s both; }
+  .note path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw 0.45s ease-out 1.45s forwards;
+  }
+  .note path + path { animation-delay: 1.85s; animation-duration: 0.2s; }
+
+  /* The underline under the current page grows in */
+  .nav a[aria-current="page"]::after {
+    transform-origin: left center;
+    animation: grow 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.15s both;
+  }
+
+  /* Sun and moon spin in when the theme is switched */
+  .theme-toggle.spin svg { animation: spin-in 0.45s cubic-bezier(0.3, 1.4, 0.5, 1); }
+
+  /* Media slides onto the bench when a drawer opens */
+  .drawer.open .media-item { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .drawer.open .media-item:nth-child(2) { animation-delay: 0.08s; }
+  .drawer.open .media-item:nth-child(3) { animation-delay: 0.16s; }
+}
+
+@keyframes sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
+@keyframes write { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes spin-in { from { transform: rotate(-90deg) scale(0.5); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }

@@ -7,7 +7,11 @@
   // Theme toggle
   var toggle = document.getElementById('theme-toggle');
   if (toggle) {
+    toggle.addEventListener('animationend', function () { toggle.classList.remove('spin'); });
     toggle.addEventListener('click', function () {
+      toggle.classList.remove('spin');
+      void toggle.offsetWidth; // restart the spin if clicked again quickly
+      toggle.classList.add('spin');
       var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       try { localStorage.setItem('theme', next); } catch (e) {}
@@ -37,6 +41,22 @@
     };
     tick();
     setInterval(tick, 20000);
+  }
+
+  // Power up the chip on the home page when it scrolls into view
+  var board = document.querySelector('.board');
+  if (board) {
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      board.classList.add('powered');
+    } else {
+      var boardIo = new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) {
+          board.classList.add('powered');
+          boardIo.disconnect();
+        }
+      }, { threshold: 0.35 });
+      boardIo.observe(board);
+    }
   }
 
   // Back to top
