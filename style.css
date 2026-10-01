@@ -787,6 +787,79 @@ html:not(.js) .drawer-inner { visibility: visible; }
   background-position: -1px -1px;
 }
 
+.bench-log {
+  width: 250px;
+  max-width: 72vw;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bench-log-title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--copper);
+  margin-bottom: 0.6rem;
+}
+
+.bench-log ol { list-style: none; border-left: 2px solid color-mix(in srgb, var(--copper) 45%, transparent); }
+
+.bench-log button {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  text-align: left;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  padding: 0.45rem 0 0.45rem 1.1rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.bench-log button span {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* a via on the trace for each moment */
+.bench-log button::before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 0.7rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  border: 2px solid var(--copper);
+  transition: background-color 0.15s ease;
+}
+
+.bench-log button:hover { color: var(--ink); }
+.bench-log button:hover::before,
+.bench-log button.now::before { background: var(--copper); }
+.bench-log button.now { color: var(--ink); }
+
+[data-theme="dark"] .bench {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink-soft) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink-soft) 14%, transparent) 1px, transparent 1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer, .drawer-icon { transition: none; }
+}
+
 .media-item {
   flex: 0 0 auto;
   scroll-snap-align: start;
@@ -808,7 +881,7 @@ html:not(.js) .drawer-inner { visibility: visible; }
 }
 
 .shot figcaption {
-  font-family: "Caveat", cursive;
+  font-family: "Caveat", "Segoe Print", "Bradley Hand", cursive;
   font-size: 1.3rem;
   color: var(--copper);
   margin-top: 0.6rem;
@@ -896,7 +969,7 @@ html:not(.js) .drawer-inner { visibility: visible; }
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 0 0 6px rgba(176, 97, 43, 0.25), 0 8px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--copper) 30%, transparent), 0 8px 20px rgba(0, 0, 0, 0.35);
   transition: transform 0.15s ease, opacity 0.2s ease;
 }
 
@@ -908,19 +981,20 @@ html:not(.js) .drawer-inner { visibility: visible; }
 
 .player-bar {
   display: none;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0 2px;
   background: var(--chip);
   color: #f2ede4;
   border-radius: 0 0 12px 12px;
-  padding: 6px 6px 8px;
+  padding: 2px 8px 6px;
 }
 
 .player.ready .player-bar { display: flex; }
 
 .player-btn {
   flex-shrink: 0;
-  width: 40px;
+  width: 36px;
   height: 40px;
   display: inline-flex;
   align-items: center;
@@ -949,9 +1023,11 @@ html:not(.js) .drawer-inner { visibility: visible; }
 /* The seek bar is a copper trace with a via for a thumb */
 .player-seek {
   --p: 0%;
-  flex: 1;
+  order: -1;
+  flex: 1 0 100%;
   min-width: 0;
-  height: 40px;
+  height: 22px;
+  margin: 0;
   background: transparent;
   -webkit-appearance: none;
   appearance: none;
@@ -978,7 +1054,11 @@ html:not(.js) .drawer-inner { visibility: visible; }
   border-radius: 50%;
   background: #23201b;
   border: 3px solid #d9a066;
+  transition: transform 0.15s ease;
 }
+
+.player-seek:hover::-webkit-slider-thumb,
+.player-seek:active::-webkit-slider-thumb { transform: scale(1.25); }
 
 .player-seek::-moz-range-thumb {
   width: 8px;
@@ -991,7 +1071,7 @@ html:not(.js) .drawer-inner { visibility: visible; }
 .player-seek:focus-visible { outline: 2px solid #d9a066; outline-offset: 2px; border-radius: 4px; }
 
 .player-time {
-  flex-shrink: 0;
+  flex: 1;
   font-family: var(--mono);
   font-size: 0.75rem;
   color: rgba(242, 237, 228, 0.7);
@@ -1000,15 +1080,14 @@ html:not(.js) .drawer-inner { visibility: visible; }
 }
 
 .player figcaption {
-  font-family: "Caveat", cursive;
+  font-family: "Caveat", "Segoe Print", "Bradley Hand", cursive;
   font-size: 1.3rem;
   color: var(--copper);
   margin-top: 0.5rem;
   transform: rotate(-1.5deg);
 }
 
-[data-theme="dark"] .player-screen,
-[data-theme="dark"] .player-bar { box-shadow: 0 0 0 1px var(--line); }
+[data-theme="dark"] .player-screen { box-shadow: none; }
 
 /* Datasheet-style parts list with dotted leaders */
 .spec {
@@ -1293,11 +1372,7 @@ html:not(.js) .chapter::before {
 
 .email-link { border-color: #d9a066; color: #d9a066; }
 
-.fine-print {
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  color: rgba(242, 237, 228, 0.45);
-}
+.fine-print { color: rgba(242, 237, 228, 0.6); }
 
 .footer-bottom {
   display: flex;
@@ -1372,7 +1447,8 @@ html:not(.js) .chapter::before {
 @media (max-width: 960px) {
   .project { grid-template-columns: 4rem minmax(0, 1fr); }
   .spec, .drawer { grid-column: 2; }
-  .spec { margin-top: 2rem; }
+  .spec { margin-top: 2rem; order: 2; }
+  .drawer { order: 1; }
   .split, .now-grid { grid-template-columns: minmax(0, 1fr); gap: 3.5rem; }
   .journey { --step: 2rem; }
 }
@@ -1501,7 +1577,8 @@ html:not(.js) .chapter::before {
   .project-body, .spec { margin-top: 1.1rem; }
   .drawer { order: 1; }
   .spec { order: 2; }
-  .bench { padding: 1.25rem; gap: 1.25rem; margin-top: 1.25rem; }
+  .bench { width: 100%; flex-wrap: wrap; justify-content: center; padding: 1.25rem; gap: 1.5rem; margin-top: 1.25rem; }
+  .bench .player, .bench-log { width: 100%; max-width: 300px; }
   .drawer-toggle { margin-top: 1rem; }
 
   .quote { margin-bottom: 3rem; padding-left: 1.25rem; }

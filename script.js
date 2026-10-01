@@ -151,6 +151,23 @@
       else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
     });
 
+    // The lab log next to the video: click a moment to jump to it
+    var bench = player.closest('.bench');
+    var marks = bench ? bench.querySelectorAll('[data-seek]') : [];
+    marks.forEach(function (mark) {
+      mark.addEventListener('click', function () {
+        video.currentTime = parseFloat(mark.dataset.seek);
+        video.play();
+      });
+    });
+    if (marks.length) {
+      video.addEventListener('timeupdate', function () {
+        var current = null;
+        marks.forEach(function (m) { if (video.currentTime >= parseFloat(m.dataset.seek) - 0.05) current = m; });
+        marks.forEach(function (m) { m.classList.toggle('now', m === current && video.currentTime > 0); });
+      });
+    }
+
     paint();
   });
 
