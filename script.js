@@ -46,26 +46,16 @@
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+    var footer = document.querySelector('.site-footer');
+    if (footer && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        backToTop.classList.toggle('over-footer', entries[0].isIntersecting);
+      }, { rootMargin: '0px 0px -60px 0px' }).observe(footer);
+    }
     backToTop.addEventListener('click', function () {
       backToTop.blur();
       window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
     });
-  }
-
-  // Reveal on scroll
-  var reveals = document.querySelectorAll('.reveal');
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('in');
-          io.unobserve(entry.target);
-        }
-      });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    reveals.forEach(function (el) { el.classList.add('in'); });
   }
 
   // Project filters
@@ -106,7 +96,20 @@
 
     var chapters = journey.querySelectorAll('.chapter');
     var points = [];
+    var samples = [];
     var length = 0;
+
+    var lengthAtY = function (y) {
+      if (y <= samples[0].y) return 0;
+      for (var i = 1; i < samples.length; i++) {
+        if (samples[i].y >= y) {
+          var a = samples[i - 1], b = samples[i];
+          var t = b.y === a.y ? 1 : (y - a.y) / (b.y - a.y);
+          return a.len + t * (b.len - a.len);
+        }
+      }
+      return length;
+    };
 
     var draw = function () {
       var box = journey.getBoundingClientRect();
@@ -121,8 +124,8 @@
       for (var i = 1; i < points.length; i++) {
         var a = points[i - 1];
         var b = points[i];
-        var dx = b.x - a.x;
-        if (dx > 0) {
+        var dx = Math.abs(b.x - a.x);
+        if (dx > 1) {
           // run straight down, then a 45 degree jog over to the next via
           d += ' L' + a.x + ' ' + (b.y - dx - 24) + ' L' + b.x + ' ' + (b.y - 24) + ' L' + b.x + ' ' + b.y;
         } else {
@@ -133,6 +136,14 @@
       live.setAttribute('d', d);
       length = live.getTotalLength();
       live.style.strokeDasharray = length;
+
+      // The path is longer than it is tall because of the jogs, so map
+      // heights to lengths by sampling along it.
+      samples = [];
+      for (var s = 0; s <= 300; s++) {
+        var len = length * s / 300;
+        samples.push({ len: len, y: live.getPointAtLength(len).y });
+      }
       update();
     };
 
@@ -141,9 +152,7 @@
       var box = journey.getBoundingClientRect();
       // the "current" reaches as far as 60% down the screen
       var reach = window.innerHeight * 0.6 - box.top;
-      var lastY = points[points.length - 1].y;
-      var progress = Math.max(0, Math.min(1, reach / lastY));
-      live.style.strokeDashoffset = length * (1 - progress);
+      live.style.strokeDashoffset = length - lengthAtY(reach);
       points.forEach(function (p) {
         p.el.classList.toggle('lit', reach >= p.y - 4);
       });
