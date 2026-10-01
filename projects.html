@@ -22,8 +22,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <header class="site-header">
@@ -63,7 +63,7 @@
             <h2>Smart Waste Bin</h2>
             <p>A bin that opens its own lid when you walk up to it and reports how full it is to a live web dashboard over Wi-Fi.</p><p>We built it as a team and presented it in the lab.</p>
             
-            <button class="drawer-toggle" type="button" aria-expanded="false" aria-controls="smart-waste-bin-media"><span class="drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="drawer-label">See it working</span><span class="drawer-count">1 video</span></button>
+            <button class="drawer-toggle" type="button" aria-expanded="false" aria-controls="smart-waste-bin-media"><span class="drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="drawer-label">See it working</span><span class="drawer-count">14s clip</span></button>
           </div>
           <div class="spec">
             <p class="spec-title">Parts list</p>
@@ -80,7 +80,7 @@
               <div class="bench">
             <figure class="player media-item">
               <div class="player-screen">
-                <video poster="media/smart-bin-poster.jpg" preload="metadata" playsinline controls width="360" height="640"><source src="media/smart-bin.webm?v=2" type="video/webm"><source src="media/smart-bin.mp4?v=2" type="video/mp4"></video>
+                <video poster="media/smart-bin-poster.jpg?v=3" preload="metadata" playsinline controls width="360" height="640"><source src="media/smart-bin.webm?v=3" type="video/webm"><source src="media/smart-bin.mp4?v=3" type="video/mp4"></video>
                 <button class="player-big" type="button" aria-label="Play video"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></button>
               </div>
               <div class="player-bar">
@@ -92,6 +92,16 @@
               </div>
               <figcaption>the lid opening on its own</figcaption>
             </figure>
+            <div class="bench-log media-item">
+              <p class="bench-log-title">What you're seeing</p>
+              <ol>
+                <li><button type="button" data-seek="0.4"><span>0:00</span>A hand comes close, the servo swings the lid open</button></li>
+                <li><button type="button" data-seek="3.1"><span>0:03</span>Nobody there anymore, so it closes</button></li>
+                <li><button type="button" data-seek="6.2"><span>0:06</span>Second try, opens again</button></li>
+                <li><button type="button" data-seek="7.9"><span>0:08</span>Closes on its own</button></li>
+                <li><button type="button" data-seek="9.5"><span>0:09</span>Checking the lid by hand</button></li>
+              </ol>
+            </div>
               </div>
             </div>
           </div>
@@ -212,10 +222,9 @@
         </a>
       </div>
       <div class="footer-bottom">
-        <span>Bertrand Osei-Owusu Bosu</span>
-        <span>Accra, Ghana</span>
+        <span>Bertrand Osei-Owusu Bosu, Accra</span>
+        <span class="fine-print">Built with AI assistance</span>
       </div>
-      <p class="fine-print">Built with AI assistance.</p>
     </div>
   </footer>
 
@@ -223,6 +232,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
