@@ -158,6 +158,11 @@
       mark.addEventListener('click', function () {
         video.currentTime = parseFloat(mark.dataset.seek);
         video.play();
+        // on phones the log sits under the video, so bring the video back into view
+        var r = player.getBoundingClientRect();
+        if (r.top < 0 || r.bottom > window.innerHeight) {
+          player.scrollIntoView({ block: 'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+        }
       });
     });
     if (marks.length) {
@@ -165,6 +170,9 @@
         var current = null;
         marks.forEach(function (m) { if (video.currentTime >= parseFloat(m.dataset.seek) - 0.05) current = m; });
         marks.forEach(function (m) { m.classList.toggle('now', m === current && video.currentTime > 0); });
+      });
+      video.addEventListener('ended', function () {
+        marks.forEach(function (m) { m.classList.remove('now'); });
       });
     }
 
