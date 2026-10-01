@@ -14,12 +14,13 @@
     });
   }
 
-  // Build the email address on click so scrapers don't find it (same trick as the blog)
-  document.querySelectorAll('[data-user][data-domain]').forEach(function (link) {
-    var address = link.dataset.user + '@' + link.dataset.domain;
-    link.href = 'mailto:' + address;
-    var label = link.querySelector('.addr');
-    if (label) label.textContent = address;
+  // Build the email address only when the icon is clicked, so it never
+  // appears in the page for spam bots to scrape (same trick as the blog)
+  document.querySelectorAll('.email-link').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      window.location.href = 'mailto:' + link.dataset.user + '@' + link.dataset.domain;
+    });
   });
 
   // Local time in Accra
@@ -72,6 +73,72 @@
       });
     });
   }
+
+  // Video player with controls that match the site
+  document.querySelectorAll('.player').forEach(function (player) {
+    var video = player.querySelector('video');
+    var big = player.querySelector('.player-big');
+    var toggle = player.querySelector('.player-toggle');
+    var seek = player.querySelector('.player-seek');
+    var time = player.querySelector('.player-time');
+    var mute = player.querySelector('.player-mute');
+    var full = player.querySelector('.player-full');
+
+    video.removeAttribute('controls');
+    player.classList.add('ready');
+
+    var fmt = function (t) {
+      t = Math.max(0, Math.floor(t || 0));
+      return Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2);
+    };
+
+    var paint = function () {
+      var p = video.duration ? video.currentTime / video.duration : 0;
+      seek.value = Math.round(p * 1000);
+      seek.style.setProperty('--p', (p * 100) + '%');
+      time.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
+    };
+
+    var play = function () {
+      if (video.paused || video.ended) video.play(); else video.pause();
+    };
+
+    video.addEventListener('play', function () {
+      player.classList.add('playing');
+      toggle.setAttribute('aria-label', 'Pause');
+    });
+    video.addEventListener('pause', function () {
+      player.classList.remove('playing');
+      toggle.setAttribute('aria-label', 'Play');
+    });
+    video.addEventListener('ended', function () { player.classList.add('ended'); });
+    video.addEventListener('playing', function () { player.classList.remove('ended'); });
+    video.addEventListener('timeupdate', paint);
+    video.addEventListener('loadedmetadata', paint);
+    video.addEventListener('volumechange', function () {
+      player.classList.toggle('muted', video.muted);
+      mute.setAttribute('aria-label', video.muted ? 'Unmute' : 'Mute');
+    });
+
+    big.addEventListener('click', play);
+    toggle.addEventListener('click', play);
+    video.addEventListener('click', play);
+
+    seek.addEventListener('input', function () {
+      if (video.duration) video.currentTime = seek.value / 1000 * video.duration;
+      paint();
+    });
+
+    mute.addEventListener('click', function () { video.muted = !video.muted; });
+
+    full.addEventListener('click', function () {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (video.requestFullscreen) video.requestFullscreen();
+      else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+    });
+
+    paint();
+  });
 
   // Journey: draw a copper trace through every via, with 45 degree bends like a
   // real PCB, and fill it with "current" as you scroll down the page.
