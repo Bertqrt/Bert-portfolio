@@ -2,212 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bertrand Osei-Owusu Bosu | Portfolio</title>
-  <meta name="description" content="Bert Bosu is a Computer Engineering student at the University of Ghana building embedded systems and applied AI projects.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Bertrand Osei-Owusu Bosu</title>
+  <meta name="description" content="Bert Bosu studies computer engineering at the University of Ghana and builds embedded systems and applied AI projects.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Bertrand Osei-Owusu Bosu | Portfolio">
-  <meta property="og:description" content="Computer Engineering student at the University of Ghana building where hardware meets software.">
+  <meta property="og:title" content="Bertrand Osei-Owusu Bosu">
+  <meta property="og:description" content="Bert Bosu studies computer engineering at the University of Ghana and builds embedded systems and applied AI projects.">
   <meta property="og:url" content="https://bertqrt.github.io/Bert-portfolio/">
-  <meta name="theme-color" content="#23395b">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2323395b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' font-weight='600' fill='%23fbfbf9'%3EB%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#faf7f2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1b1815" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%232f5d50'/%3E%3Cpath fill='%23f2ede4' fill-rule='evenodd' d='M18 14h16c6.5 0 11.5 3.5 11.5 9.5 0 4-2.5 7-6.5 8.3 4.8 1.2 8 4.7 8 9.7 0 6.5-5.5 8.5-13 8.5H18V14zm8 7v7.5h8c3.5 0 5.5-1.5 5.5-3.8 0-2.3-2-3.7-5.5-3.7h-8zm0 13.5V43h8.5c4 0 6-1.6 6-4.2 0-2.6-2-4.3-6-4.3H26z'/%3E%3C/svg%3E">
   <script>
     (function () {
-      var theme;
+      var theme = null;
       try { theme = localStorage.getItem('theme'); } catch (e) {}
-      if (!theme) {
-        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
+      if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', theme);
     })();
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Source+Serif+4:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="#top">Bertrand Osei-Owusu Bosu</a>
-      <div class="header-right">
-        <nav class="nav" aria-label="Main">
-          <a href="#projects">Projects</a>
-          <a href="#journey">Journey</a>
-          <a href="#now">Now</a>
-          <a href="https://bertqrt.github.io/bertrandbosu-blog1/">Blog</a>
-        </nav>
-        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        </button>
-      </div>
+      <a class="home-link" href="index.html" aria-current="page">Bert Bosu</a>
+      <nav class="nav" aria-label="Main">
+        <a href="projects.html">Projects</a>
+        <a href="journey.html">Journey</a>
+        <a href="now.html">Now</a>
+        <a class="ext" href="https://bertqrt.github.io/bertrandbosu-blog1/">Blog</a>
+      </nav>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
     </div>
   </header>
 
-  <main class="wrap" id="top">
+  <main class="wrap">
     <section class="hero">
-      <div class="hero-text">
-        <p class="eyebrow">Computer Engineering, University of Ghana &middot; Accra</p>
-        <h1>Hi, I'm Bert. I build things where hardware meets software.</h1>
-        <p class="pitch">I'm a Level 100 Computer Engineering student working on embedded systems, with applied AI on the side. This year I've built a smart waste bin, an RFID access system, a reading device for the visually impaired and an AI study bot. I learn best by building, and I write about what I'm learning as I go.</p>
-        <div class="actions">
-          <a class="btn" href="#projects">See my projects</a>
-          <a class="text-link" href="mailto:bertrandoseiowusu22@gmail.com">Get in touch &rarr;</a>
+      <div>
+        <p class="mono status"><span class="led" aria-hidden="true"></span> Accra, <span id="accra-time">GMT</span></p>
+        <h1>Hi, I'm <em>Bert.</em></h1>
+        <p class="lede">I study computer engineering at the University of Ghana and spend way too much time <span class="hl">messing with embedded systems.</span></p>
+        <div class="hero-actions">
+          <a class="btn" href="projects.html">See what I've built <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="link" href="#contact">Get in touch</a>
         </div>
       </div>
-      <!-- To add a photo, replace the span below with: <img src="photo.jpg" alt="Bertrand Osei-Owusu Bosu"> -->
-      <div class="portrait">
-        <span class="monogram" aria-hidden="true">B</span>
+      <figure class="photo">
+        <p class="note" aria-hidden="true">that's me
+          <svg viewBox="0 0 64 36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6c14 0 30 6 50 22"/><path d="M44 28l10 0 -2 -10"/></svg>
+        </p>
+        <div class="print">
+          <!-- To add a photo, replace the span below with: <img src="photo.jpg" alt="Bertrand Osei-Owusu Bosu"> -->
+          <div class="print-frame"><span class="monogram" aria-hidden="true">B</span></div>
+          <figcaption class="print-caption">Level 100, Legon</figcaption>
+        </div>
+      </figure>
+    </section>
+
+    <section class="board-section reveal" aria-labelledby="board-title">
+      <div class="section-head">
+        <h2 id="board-title">Pick a pin</h2>
+        <span class="mono">4 outputs</span>
+      </div>
+      <div class="board">
+        <div class="chip" aria-hidden="true">
+          <span class="chip-notch"></span>
+          <span class="chip-name">BERT<br>BOSU</span>
+          <span class="chip-meta">UG CPEN<br>ACCRA, GH<br>REV 2026</span>
+        </div>
+        <ol class="pads">
+          <li><a class="pad" href="projects.html"><span class="pulse"></span><span class="pad-text"><span class="pad-title">Projects</span><span class="pad-desc">A self-opening bin, a reading wand and a study bot, plus a few more</span></span><svg class="pad-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          <li><a class="pad" href="journey.html"><span class="pulse"></span><span class="pad-text"><span class="pad-title">Journey</span><span class="pad-desc">From blinking LEDs to a RAG study assistant</span></span><svg class="pad-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          <li><a class="pad" href="now.html"><span class="pulse"></span><span class="pad-text"><span class="pad-title">Now</span><span class="pad-desc">What I'm learning this month, and my toolbox</span></span><svg class="pad-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+          <li><a class="pad" href="https://bertqrt.github.io/bertrandbosu-blog1/"><span class="pulse"></span><span class="pad-text"><span class="pad-title">Blog</span><span class="pad-desc">Where I think out loud about building and learning</span></span><svg class="pad-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></li>
+        </ol>
       </div>
     </section>
 
-    <section class="section" id="projects">
-      <div class="section-label">
-        <h2>Projects</h2>
+    <section class="split reveal">
+      <div class="feature">
+        <p class="mono feature-label">Latest build</p>
+        <h3>A Telegram bot that studies my lecture slides</h3>
+        <p>It started as trivia and reminders. Then I gave it a <code>/study</code> command: it reads my lecture PDFs, finds the parts that match a question, and answers from them using retrieval-augmented generation (RAG). It also remembers who it's talking to.</p>
+        <a class="link" href="projects.html#telegram-bot">Read about it</a>
       </div>
       <div>
-        <ul class="projects">
-          <li class="project">
-            <p class="kicker">Embedded &middot; Team project</p>
-            <h3>Smart Waste Bin</h3>
-            <p>A Wi-Fi enabled bin that opens its own lid and reports how full it is to a live web dashboard. We built it as a team and presented it in the lab.</p>
-            <ul class="tags">
-              <li>ESP32</li><li>Ultrasonic sensor</li><li>Servo motor</li><li>Web dashboard</li>
-            </ul>
-          </li>
-          <li class="project">
-            <p class="kicker">Assistive tech &middot; CPEN 104</p>
-            <h3>OCR Assistive Reading Wand</h3>
-            <p>A handheld device that reads printed text aloud to visually impaired users through bone conduction earphones. It's designed to cost GHS 350 to 500, so it stays affordable.</p>
-            <ul class="tags">
-              <li>Raspberry Pi Zero 2W</li><li>Tesseract OCR</li><li>eSpeak-ng</li><li>Bone conduction audio</li>
-            </ul>
-          </li>
-          <li class="project">
-            <p class="kicker">Applied AI</p>
-            <h3>Telegram AI Bot</h3>
-            <p>A bot with trivia, task reminders and AI chat that remembers each user. Its <code>/study</code> command answers questions from lecture slides using retrieval-augmented generation (RAG).</p>
-            <ul class="tags">
-              <li>Python</li><li>python-telegram-bot</li><li>Gemini 2.5 Flash</li><li>PyMuPDF</li><li>sentence-transformers</li><li>NumPy</li>
-            </ul>
-          </li>
-          <li class="project">
-            <p class="kicker">Embedded</p>
-            <h3>RFID Access Control System</h3>
-            <p>A card-based door access system that reads RFID cards to decide who gets in.</p>
-            <ul class="tags">
-              <li>Arduino</li><li>MFRC522 RFID reader</li>
-            </ul>
-          </li>
-          <li class="project">
-            <p class="kicker">Engineering analysis</p>
-            <h3>Bongo Water Filter: Techno-Economic Analysis</h3>
-            <p>A cost and risk analysis of a water filter design, with dashboards for total cost of ownership (TCO), net present value (NPV) and failure modes and effects analysis (FMEA).</p>
-            <ul class="tags">
-              <li>MATLAB</li><li>Excel</li>
-            </ul>
-          </li>
-          <li class="project">
-            <p class="kicker">Web</p>
-            <h3>Personal Blog</h3>
-            <p>Where I share my thoughts and document my progress. It has a sticky translucent header, a light and dark mode toggle, and links from one post to the next.</p>
-            <ul class="tags">
-              <li>Jekyll</li><li>Markdown</li><li>HTML/CSS</li><li>GitHub Pages</li>
-            </ul>
-            <div class="project-links">
-              <a class="text-link small" href="https://bertqrt.github.io/bertrandbosu-blog1/">Read the blog &#8599;</a>
-              <a class="text-link small" href="https://github.com/Bertqrt/bertrandbosu-blog1">Source &#8599;</a>
-            </div>
-          </li>
+        <p class="mono feature-label">From the blog</p>
+        <ul class="writing-list">
+          <li><a href="https://bertqrt.github.io/bertrandbosu-blog1/writing/the-fear-of-starting/"><span class="date">Sep 29, 2026</span><span class="title">The fear of starting</span></a></li>
+          <li><a href="https://bertqrt.github.io/bertrandbosu-blog1/writing/motivation-kinda-sucks/"><span class="date">Sep 25, 2026</span><span class="title">Motivation kinda sucks</span></a></li>
+          <li><a href="https://bertqrt.github.io/bertrandbosu-blog1/writing/the-start-of-something-i-guess/"><span class="date">Sep 25, 2026</span><span class="title">The Start of Something, I guess</span></a></li>
         </ul>
-        <p class="also"><span>Also:</span> Proteus circuit simulation labs, MATLAB and Excel engineering labs (SENG 112), and a campus Wi-Fi performance analysis.</p>
+        <a class="link writing-more" href="https://bertqrt.github.io/bertrandbosu-blog1/">All posts</a>
       </div>
-    </section>
-
-    <section class="section" id="journey">
-      <div class="section-label">
-        <h2>Journey</h2>
-      </div>
-      <ol class="timeline">
-        <li>
-          <span class="when">2026</span>
-          <div>
-            <h3>Started Computer Engineering</h3>
-            <p>Began my BSc at the University of Ghana and became course rep for Level 100.</p>
-          </div>
-        </li>
-        <li>
-          <span class="when"></span>
-          <div>
-            <h3>First Arduino projects</h3>
-            <p>An LED sequencer and an ultrasonic sensor with an LCD readout.</p>
-          </div>
-        </li>
-        <li>
-          <span class="when"></span>
-          <div>
-            <h3>Smart waste bin</h3>
-            <p>Built and presented a Wi-Fi bin with an ESP32 and a live web dashboard.</p>
-          </div>
-        </li>
-        <li>
-          <span class="when"></span>
-          <div>
-            <h3>AI Fluency and a study bot</h3>
-            <p>Got certified in Anthropic's AI Fluency course and built a RAG study assistant into my Telegram bot.</p>
-          </div>
-        </li>
-        <li class="next">
-          <span class="when">Next</span>
-          <div>
-            <h3>Full stack, deeper embedded, an internship</h3>
-            <p>Getting properly into frontend and backend development (HTML, CSS, React), going deeper on embedded systems, and landing an internship.</p>
-          </div>
-        </li>
-      </ol>
-    </section>
-
-    <section class="section" id="now">
-      <div class="section-label">
-        <h2>Now</h2>
-        <span class="updated">Updated October 2026</span>
-      </div>
-      <ul class="now-list">
-        <li>Learning HTML and CSS through freeCodeCamp</li>
-        <li>Writing on <a class="text-link" href="https://bertqrt.github.io/bertrandbosu-blog1/">my blog</a></li>
-        <li>Improving my Telegram bot's study assistant</li>
-      </ul>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" id="contact">
     <div class="wrap footer-inner">
-      <a class="footer-email" href="mailto:bertrandoseiowusu22@gmail.com">bertrandoseiowusu22@gmail.com</a>
-      <div class="social">
-        <a href="https://www.linkedin.com/in/bertbnk/" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        </a>
-        <a href="https://github.com/Bertqrt" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </a>
-        <a href="https://bertqrt.github.io/bertrandbosu-blog1/" aria-label="Blog">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        </a>
+      <p class="mono footer-kicker">Say hi</p>
+      <p class="footer-big">Got an internship, a project, or a circuit that won't behave?</p>
+      <a class="footer-email" href="#" data-user="bertrandoseiowusu22" data-domain="gmail.com"><span class="addr">Email me</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <div class="footer-bottom">
+        <span>Bertrand Osei-Owusu Bosu, Accra</span>
+        <div class="social">
+          <a href="https://www.linkedin.com/in/bertbnk/" aria-label="LinkedIn">
+            <svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M100.28 448H7.4V148.9h92.88zm-46.44-338.5C24.09 109.5 0 85.4 0 55.9 0 25.4 24.1 1 53.84 1c29.7 0 53.84 24.4 53.84 54.9 0 29.5-24.14 53.6-53.84 53.6zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/></svg>
+          </a>
+          <a href="https://github.com/Bertqrt" aria-label="GitHub">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          </a>
+          <a href="https://bertqrt.github.io/bertrandbosu-blog1/" aria-label="Blog">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var root = document.documentElement;
-      var btn = document.getElementById('theme-toggle');
-      btn.addEventListener('click', function () {
-        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        root.setAttribute('data-theme', next);
-        try { localStorage.setItem('theme', next); } catch (e) {}
-      });
-    })();
-  </script>
+  <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+  </button>
+
+  <script src="script.js"></script>
 </body>
 </html>
