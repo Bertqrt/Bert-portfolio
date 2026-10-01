@@ -94,16 +94,80 @@
     });
   }
 
-  // Project media drawers
+  // Project media drawers.
+  // The layout changes once, instantly; then the panel is revealed with a clip
+  // and everything below it slides into place with transforms (FLIP), so the
+  // phone never has to re-layout the page on every frame.
+  var DRAWER_MS = 420;
+  var DRAWER_EASE = 'cubic-bezier(0.25, 0.8, 0.25, 1)';
+
+  // Everything that sits visually below the drawer and must move with it
+  var nodesBelow = function (drawer) {
+    var top = drawer.getBoundingClientRect().top - 1;
+    var out = [];
+    var li = drawer.closest('.project');
+    Array.prototype.forEach.call(li.children, function (el) {
+      if (el !== drawer && el.getBoundingClientRect().top >= top) out.push(el);
+    });
+    var n;
+    for (n = li.nextElementSibling; n; n = n.nextElementSibling) out.push(n);
+    for (n = li.parentElement.nextElementSibling; n; n = n.nextElementSibling) out.push(n);
+    var main = li.closest('main');
+    for (n = main.nextElementSibling; n; n = n.nextElementSibling) {
+      if (n.tagName !== 'SCRIPT' && !n.classList.contains('back-to-top')) out.push(n);
+    }
+    return out;
+  };
+
   document.querySelectorAll('.drawer-toggle').forEach(function (btn) {
     var drawer = document.getElementById(btn.getAttribute('aria-controls'));
     if (!drawer) return;
+    var inner = drawer.querySelector('.drawer-inner');
+    var running = [];
+    var finishTimer = null;
+
+    var settle = function () {
+      running.forEach(function (a) { a.cancel(); });
+      running = [];
+      clearTimeout(finishTimer);
+    };
+
     btn.addEventListener('click', function () {
       var open = btn.getAttribute('aria-expanded') !== 'true';
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-      drawer.classList.toggle('open', open);
-      if (!open) {
-        drawer.querySelectorAll('video').forEach(function (v) { v.pause(); });
+      settle();
+      if (!open) drawer.querySelectorAll('video').forEach(function (v) { v.pause(); });
+
+      if (reduceMotion || !inner.animate) {
+        drawer.classList.toggle('open', open);
+        return;
+      }
+
+      var below = nodesBelow(drawer);
+      var opts = { duration: DRAWER_MS, easing: DRAWER_EASE };
+      var anim = function (el, frames) { running.push(el.animate(frames, opts)); };
+
+      if (open) {
+        // Lay out the open state once, then play from the old positions
+        drawer.classList.add('open');
+        var h = drawer.getBoundingClientRect().height;
+        anim(inner, [{ clipPath: 'inset(0 0 100% 0)' }, { clipPath: 'inset(0 0 0 0)' }]);
+        below.forEach(function (el) {
+          anim(el, [{ transform: 'translateY(' + (-h) + 'px)' }, { transform: 'translateY(0)' }]);
+        });
+      } else {
+        // Play the close while the layout is still open, then collapse once
+        var hc = drawer.getBoundingClientRect().height;
+        anim(inner, [{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(0 0 100% 0)' }]);
+        below.forEach(function (el) {
+          anim(el, [{ transform: 'translateY(0)' }, { transform: 'translateY(' + (-hc) + 'px)' }]);
+        });
+        finishTimer = setTimeout(function () {
+          drawer.classList.remove('open');
+          settle();
+        }, DRAWER_MS);
+        // keep the end frame held until the layout collapses
+        running.forEach(function (a) { a.effect && a.effect.updateTiming({ fill: 'forwards' }); });
       }
     });
   });
