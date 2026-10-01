@@ -1415,7 +1415,7 @@ html:not(.js) .chapter::before {
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
   z-index: 30;
   overflow: hidden;
 }
@@ -1430,7 +1430,15 @@ html:not(.js) .chapter::before {
   pointer-events: none;
 }
 
-.back-to-top.visible.over-footer { opacity: 0; pointer-events: none; transform: translateY(8px); }
+/* Over the dark footer it stays visible, switching to dark glass with a copper arrow */
+.back-to-top.over-footer {
+  background: rgba(242, 237, 228, 0.1);
+  border-color: rgba(242, 237, 228, 0.22);
+  color: var(--on-dark);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.back-to-top.over-footer::before { opacity: 0.25; }
 
 .back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .back-to-top svg { width: 20px; height: 20px; position: relative; }
