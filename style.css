@@ -560,7 +560,8 @@ button:focus-visible {
   padding: 1rem 0 5rem;
 }
 
-.feature-label {
+.feature-label,
+.feature .feature-label {
   font-family: var(--serif);
   font-style: italic;
   font-size: 1.1rem;
@@ -1195,7 +1196,8 @@ html:not(.js) .chapter::before {
 
   .page-intro { padding: 2.75rem 0 2rem; }
 
-  .filter { padding: 0.55rem 0.8rem; }
+  .filters { gap: 0.4rem; }
+  .filter { padding: 0.55rem 0.7rem; letter-spacing: 0.05em; }
 
   .project {
     grid-template-columns: minmax(0, 1fr);
@@ -1222,7 +1224,7 @@ html:not(.js) .chapter::before {
   }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 340px) {
   .note { display: none; }
   .nav { font-size: 0.88rem; }
 }
