@@ -755,7 +755,6 @@ button:focus-visible {
   grid-column: 2 / -1;
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .drawer.open { grid-template-rows: 1fr; }
@@ -765,7 +764,7 @@ html:not(.js) .drawer-toggle { display: none; }
 
 .drawer-inner { overflow: hidden; min-height: 0; }
 
-.drawer:not(.open) .drawer-inner { visibility: hidden; transition: visibility 0s 0.45s; }
+.drawer:not(.open) .drawer-inner { visibility: hidden; }
 html:not(.js) .drawer-inner { visibility: visible; }
 
 /* The bench: graph paper, like a lab notebook */
@@ -860,7 +859,7 @@ html:not(.js) .drawer-inner { visibility: visible; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .drawer, .drawer-icon { transition: none; }
+  .drawer-icon { transition: none; }
 }
 
 .media-item {
@@ -1666,10 +1665,6 @@ html:not(.js) .chapter::before {
   /* Sun and moon spin in when the theme is switched */
   .theme-toggle.spin svg { animation: spin-in 0.45s cubic-bezier(0.3, 1.4, 0.5, 1); }
 
-  /* Media slides onto the bench when a drawer opens */
-  .drawer.open .media-item { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-  .drawer.open .media-item:nth-child(2) { animation-delay: 0.08s; }
-  .drawer.open .media-item:nth-child(3) { animation-delay: 0.16s; }
 }
 
 @keyframes sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
@@ -1677,4 +1672,3 @@ html:not(.js) .chapter::before {
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes spin-in { from { transform: rotate(-90deg) scale(0.5); opacity: 0; } to { transform: none; opacity: 1; } }
-@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
