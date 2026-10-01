@@ -295,7 +295,7 @@ button:focus-visible {
   position: relative;
 }
 
-.print-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.print-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
 
 .print-frame .monogram {
   font-family: var(--serif);
