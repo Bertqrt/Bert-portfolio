@@ -1654,15 +1654,15 @@ html:not(.js) .chapter::before {
   /* Hero: the highlight sweeps in, then "that's me" is written and the arrow drawn */
   .lede .hl {
     background-repeat: no-repeat;
-    animation: sweep 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.45s both;
+    animation: sweep 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.9s both;
   }
-  .note { animation: write 0.6s steps(12, end) 0.9s both; }
+  .note { animation: write 0.6s steps(12, end) 1.25s both; }
   .note path {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    animation: draw 0.45s ease-out 1.45s forwards;
+    animation: draw 0.45s ease-out 1.8s forwards;
   }
-  .note path + path { animation-delay: 1.85s; animation-duration: 0.2s; }
+  .note path + path { animation-delay: 2.2s; animation-duration: 0.2s; }
 
   /* The underline under the current page grows in */
   .nav a[aria-current="page"]::after {
@@ -1680,3 +1680,90 @@ html:not(.js) .chapter::before {
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes spin-in { from { transform: rotate(-90deg) scale(0.5); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- Scroll reveal and power-on screen ---------- */
+
+.boot-screen { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* Things rise and fade in as they scroll into view, one after another.
+     script.js adds .rv, then .in when the element enters the screen. */
+  .js .rv {
+    opacity: 0;
+    transform: translate3d(0, 32px, 0);
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--rd, 0s),
+      transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) var(--rd, 0s);
+  }
+  .js .rv.in { opacity: 1; transform: none; }
+
+  /* Hero animations wait while the power-on screen is up */
+  .booting .lede .hl,
+  .booting .note,
+  .booting .note path { animation-play-state: paused; }
+
+  /* Power-on screen: the dark chip with a copper trace filling like a progress bar */
+  .boot .boot-screen {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+    background: var(--chip);
+    color: var(--chip-ink);
+    /* safety net: always clears itself even if the script never runs */
+    animation: boot-out 0.6s cubic-bezier(0.7, 0, 0.3, 1) 2.6s forwards;
+  }
+  .boot-screen.leave { animation: boot-out 0.6s cubic-bezier(0.7, 0, 0.3, 1) forwards; }
+
+  .boot-chip {
+    position: relative;
+    width: 128px;
+    padding: 1rem 1rem 1.1rem;
+    border-radius: 8px;
+    background: #2b2723;
+    animation: boot-chip 0.5s cubic-bezier(0.3, 1.4, 0.5, 1) both;
+  }
+  .boot-chip::before,
+  .boot-chip::after {
+    content: "";
+    position: absolute;
+    top: 0.8rem;
+    bottom: 0.8rem;
+    width: 8px;
+    background: repeating-linear-gradient(to bottom, #b9b2a5 0 5px, transparent 5px 14px);
+  }
+  .boot-chip::before { left: -8px; }
+  .boot-chip::after { right: -8px; }
+  .boot-notch { display: block; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid rgba(242, 237, 228, 0.35); }
+  .boot-name { display: block; margin-top: 0.8rem; font-family: var(--mono); font-weight: 700; font-size: 1.15rem; letter-spacing: 0.05em; line-height: 1.1; }
+
+  .boot-trace { position: relative; width: 168px; height: 2px; background: rgba(242, 237, 228, 0.15); border-radius: 2px; }
+  .boot-fill {
+    position: absolute; inset: 0;
+    background: var(--on-dark);
+    border-radius: 2px;
+    transform-origin: left center;
+    animation: boot-fill 0.85s cubic-bezier(0.5, 0, 0.3, 1) 0.25s both;
+  }
+  .boot-via {
+    position: absolute; right: -6px; top: -5px;
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 2px solid var(--on-dark);
+    background: var(--chip);
+    animation: boot-via 0.3s ease-out 1.05s both;
+  }
+  .boot-text {
+    font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(242, 237, 228, 0.55);
+  }
+}
+
+@keyframes boot-out { to { transform: translate3d(0, -100%, 0); visibility: hidden; } }
+@keyframes boot-chip { from { transform: scale(0.85); opacity: 0; } }
+@keyframes boot-fill { from { transform: scaleX(0); } }
+@keyframes boot-via { to { background: var(--on-dark); box-shadow: 0 0 0 5px color-mix(in srgb, var(--on-dark) 25%, transparent); } }

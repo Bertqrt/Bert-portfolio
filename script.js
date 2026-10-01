@@ -43,6 +43,61 @@
     setInterval(tick, 20000);
   }
 
+  // ---------- Scroll reveal ----------
+  // Elements rise and fade in as they enter the screen, staggered when several
+  // arrive together. On the Journey page only the text moves, so the copper
+  // vias stay where the trace expects them.
+  var revealTargets = [
+    '.hero-text > *', '.photo',
+    '.board-section .section-head', '.chip', '.pads > li',
+    '.feature > *', '.split > div > .feature-label', '.writing-list li', '.writing-more',
+    '.page-intro > *', '.filters',
+    '.project > .project-num', '.project > .project-body', '.project > .spec', '.also',
+    '.quote', '.chapter > :not(.via)',
+    '.log li', '.updated', '.toolbox > *',
+    '.footer-big', '.contact-icons', '.footer-bottom'
+  ].join(',');
+
+  var startReveal = function () {};
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var toReveal = Array.prototype.slice.call(document.querySelectorAll(revealTargets));
+    toReveal.forEach(function (el) { el.classList.add('rv'); });
+
+    var revealIo = new IntersectionObserver(function (entries) {
+      var batch = entries.filter(function (e) { return e.isIntersecting; })
+        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
+      batch.forEach(function (entry, n) {
+        var el = entry.target;
+        var delay = Math.min(n, 6) * 0.08;
+        el.style.setProperty('--rd', delay + 's');
+        el.classList.add('in');
+        revealIo.unobserve(el);
+        // hand the element back to its own transitions once it has arrived
+        setTimeout(function () {
+          el.classList.remove('rv', 'in');
+          el.style.removeProperty('--rd');
+        }, (delay + 1) * 1000);
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+
+    startReveal = function () { toReveal.forEach(function (el) { revealIo.observe(el); }); };
+  }
+
+  // ---------- Power-on screen (home page, first visit per session) ----------
+  var bootScreen = document.querySelector('.boot-screen');
+  if (root.classList.contains('boot') && bootScreen) {
+    try { sessionStorage.setItem('booted', '1'); } catch (e) {}
+    setTimeout(function () {
+      bootScreen.classList.add('leave');
+      // the page starts building just as the screen lifts
+      setTimeout(function () { root.classList.remove('booting'); startReveal(); }, 250);
+      setTimeout(function () { root.classList.remove('boot'); }, 700);
+    }, 1350);
+  } else {
+    root.classList.remove('boot', 'booting');
+    startReveal();
+  }
+
   // Power up the chip on the home page when it scrolls into view
   var board = document.querySelector('.board');
   if (board) {
