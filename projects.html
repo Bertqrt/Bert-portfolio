@@ -23,7 +23,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <header class="site-header">
@@ -63,6 +63,7 @@
             <h2>Smart Waste Bin</h2>
             <p>A bin that opens its own lid when you walk up to it and reports how full it is to a live web dashboard over Wi-Fi.</p><p>We built it as a team and presented it in the lab.</p>
             
+            <button class="drawer-toggle" type="button" aria-expanded="false" aria-controls="smart-waste-bin-media"><span class="drawer-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="drawer-label">See it working</span><span class="drawer-count">1 video</span></button>
           </div>
           <div class="spec">
             <p class="spec-title">Parts list</p>
@@ -74,9 +75,12 @@
               <li><span>Built by</span><span>Team</span></li>
             </ul>
           </div>
-            <figure class="player">
+          <div class="drawer" id="smart-waste-bin-media">
+            <div class="drawer-inner">
+              <div class="bench">
+            <figure class="player media-item">
               <div class="player-screen">
-                <video poster="media/smart-bin-poster.jpg" preload="metadata" playsinline controls width="360" height="640"><source src="media/smart-bin.webm" type="video/webm"><source src="media/smart-bin.mp4" type="video/mp4"></video>
+                <video poster="media/smart-bin-poster.jpg" preload="metadata" playsinline controls width="360" height="640"><source src="media/smart-bin.webm?v=2" type="video/webm"><source src="media/smart-bin.mp4?v=2" type="video/mp4"></video>
                 <button class="player-big" type="button" aria-label="Play video"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg></button>
               </div>
               <div class="player-bar">
@@ -88,12 +92,16 @@
               </div>
               <figcaption>the lid opening on its own</figcaption>
             </figure>
+              </div>
+            </div>
+          </div>
         </li>
         <li class="project" id="reading-wand" data-kind="embedded">
           <span class="project-num" aria-hidden="true">02</span>
           <div class="project-body">
             <h2>OCR Reading Wand</h2>
             <p>A handheld device for visually impaired people. Point it at printed text and it reads the words aloud through bone conduction earphones, so your ears stay free to hear what's around you.</p><p>The target cost is GHS 350 to 500. If it isn't affordable, it doesn't help anyone.</p>
+            
             
           </div>
           <div class="spec">
@@ -106,13 +114,14 @@
               <li><span>Course</span><span>CPEN 104</span></li>
             </ul>
           </div>
-            
+
         </li>
         <li class="project" id="telegram-bot" data-kind="ai">
           <span class="project-num" aria-hidden="true">03</span>
           <div class="project-body">
             <h2>Telegram AI Bot</h2>
             <p>A bot with trivia, task reminders and AI chat that remembers each user.</p><p>The part I'm proudest of is <code>/study</code>. It pulls the text out of my lecture slides, finds the chunks closest to a question, and has Gemini answer from those chunks instead of guessing.</p>
+            
             
           </div>
           <div class="spec">
@@ -126,13 +135,14 @@
               <li><span>Maths</span><span>NumPy</span></li>
             </ul>
           </div>
-            
+
         </li>
         <li class="project" id="rfid-access" data-kind="embedded">
           <span class="project-num" aria-hidden="true">04</span>
           <div class="project-body">
             <h2>RFID Access Control</h2>
             <p>Tap a card and the door decides whether you get in. An Arduino reads the card's ID through an MFRC522 reader and checks it against the list of allowed cards.</p>
+            
             
           </div>
           <div class="spec">
@@ -143,13 +153,14 @@
               <li><span>Input</span><span>RFID cards</span></li>
             </ul>
           </div>
-            
+
         </li>
         <li class="project" id="water-filter" data-kind="analysis">
           <span class="project-num" aria-hidden="true">05</span>
           <div class="project-body">
             <h2>Bongo Water Filter Analysis</h2>
             <p>Is this water filter design worth building? A cost and risk study with dashboards for total cost of ownership (TCO), net present value (NPV) and failure modes and effects analysis (FMEA).</p>
+            
             
           </div>
           <div class="spec">
@@ -160,7 +171,7 @@
               <li><span>Methods</span><span>TCO, NPV, FMEA</span></li>
             </ul>
           </div>
-            
+
         </li>
         <li class="project" id="blog" data-kind="web">
           <span class="project-num" aria-hidden="true">06</span>
@@ -168,6 +179,7 @@
             <h2>This blog, and this site</h2>
             <p>A Jekyll blog where I write about what I'm learning, with a glass header, a light and dark mode, and links from one post to the next. This portfolio shares its colours and fonts.</p>
             <div class="project-links"><a class="link" href="https://bertqrt.github.io/bertrandbosu-blog1/">Read the blog</a></div>
+            
           </div>
           <div class="spec">
             <p class="spec-title">Stack</p>
@@ -178,7 +190,7 @@
               <li><span>Hosting</span><span>GitHub Pages</span></li>
             </ul>
           </div>
-            
+
         </li>
     </ol>
 
@@ -203,6 +215,7 @@
         <span>Bertrand Osei-Owusu Bosu</span>
         <span>Accra, Ghana</span>
       </div>
+      <p class="fine-print">Built with AI assistance.</p>
     </div>
   </footer>
 
@@ -210,6 +223,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
-  <script src="script.js?v=5"></script>
+  <script src="script.js?v=6"></script>
 </body>
 </html>

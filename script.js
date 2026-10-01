@@ -74,6 +74,20 @@
     });
   }
 
+  // Project media drawers
+  document.querySelectorAll('.drawer-toggle').forEach(function (btn) {
+    var drawer = document.getElementById(btn.getAttribute('aria-controls'));
+    if (!drawer) return;
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      drawer.classList.toggle('open', open);
+      if (!open) {
+        drawer.querySelectorAll('video').forEach(function (v) { v.pause(); });
+      }
+    });
+  });
+
   // Video player with controls that match the site
   document.querySelectorAll('.player').forEach(function (player) {
     var video = player.querySelector('video');
