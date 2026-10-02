@@ -1714,3 +1714,97 @@ html:not(.js) .chapter::before {
 @keyframes boot-chip { from { transform: scale(0.85); opacity: 0; } }
 @keyframes boot-fill { from { transform: scaleX(0); } }
 @keyframes boot-via { to { background: var(--on-dark); box-shadow: 0 0 0 5px color-mix(in srgb, var(--on-dark) 25%, transparent); } }
+
+/* ---------- 404: open circuit ---------- */
+
+.page-intro .nf-code {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(3.5rem, 12vw, 6.5rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--copper);
+  margin-bottom: 0.75rem;
+}
+
+.notfound { padding-bottom: 5rem; }
+.notfound .hero-actions { margin-top: 2.25rem; }
+
+/* A trace leaves the chip and breaks: two vias with a gap between them */
+.broken-trace {
+  display: flex;
+  align-items: center;
+  margin-top: 2.5rem;
+  max-width: 420px;
+}
+
+.bt-chip {
+  flex: 0 0 auto;
+  width: 54px;
+  height: 34px;
+  border-radius: 5px;
+  background: var(--chip);
+  position: relative;
+}
+
+.bt-chip::before,
+.bt-chip::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  height: 6px;
+  background: repeating-linear-gradient(to right, #b9b2a5 0 4px, transparent 4px 10px);
+}
+
+.bt-chip::before { top: -6px; }
+.bt-chip::after { bottom: -6px; }
+
+.bt-line { height: 2px; background: var(--copper); }
+.bt-a { flex: 1 1 0; }
+.bt-b { flex: 0.6 1 0; opacity: 0.35; }
+
+.bt-via {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--copper);
+  background: var(--paper);
+}
+
+.bt-v1 { background: var(--copper); }
+.bt-v2 { opacity: 0.45; }
+
+.bt-gap {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 12px;
+  position: relative;
+}
+
+/* a little spark jumping the gap */
+.bt-gap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 50%;
+  background: var(--copper);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bt-gap::before { animation: spark 2.4s ease-in-out infinite; }
+}
+
+@keyframes spark {
+  0%, 70%, 100% { opacity: 0; transform: scale(1); }
+  74% { opacity: 1; transform: scale(2.2); }
+  78% { opacity: 0.2; transform: scale(1); }
+  82% { opacity: 0.9; transform: scale(1.6); }
+  86% { opacity: 0; }
+}
