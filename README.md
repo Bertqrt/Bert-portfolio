@@ -42,4 +42,4 @@ To add a photo to a project that already has a drawer (like the Smart Waste Bin)
 
 ## Credits
 
-Built with AI assistance.
+Me and a bit of claude
