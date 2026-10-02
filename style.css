@@ -601,6 +601,31 @@ button:focus-visible {
   padding: 1rem 0 5rem;
 }
 
+/* Latest build sits on the same graph-paper card as the project media */
+.feature {
+  align-self: start;
+  padding: 1.75rem 2rem 2rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background-color: var(--paper-deep);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink-soft) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink-soft) 9%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: -1px -1px;
+}
+
+[data-theme="dark"] .feature {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--ink-soft) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ink-soft) 14%, transparent) 1px, transparent 1px);
+}
+
+.feature p:last-of-type { margin-bottom: 1.4rem; }
+
+/* the inline code chip sits on paper so it still stands out on the card */
+.split .feature code { background: var(--paper); }
+
 .feature-label,
 .feature .feature-label {
   font-family: var(--serif);
@@ -1580,6 +1605,7 @@ html:not(.js) .chapter::before {
   .pad-arrow { width: 22px; height: 22px; }
 
   .split { padding-bottom: 4rem; }
+  .feature { padding: 1.35rem 1.25rem 1.5rem; }
 
   .page-intro { padding: 2.75rem 0 2rem; }
 
