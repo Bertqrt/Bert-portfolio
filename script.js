@@ -5,7 +5,7 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Header: the name folds into the B mark as you scroll down and unfolds
-  // as soon as you scroll back up. Each letter is its own span so they can
+  // only when you are back at the very top. Each letter is its own span so they can
   // glide into the B one after another.
   var siteHeader = document.querySelector('.site-header');
   var homeLink = document.querySelector('.home-link');
@@ -47,21 +47,18 @@
     };
     var requestFold = function (state) { wantFolded = state; applyFold(); };
 
-    var lastY = window.pageYOffset;
+    // Folded everywhere except the very top of the page
     var foldTicking = false;
     var setFold = function () {
       foldTicking = false;
       var y = window.pageYOffset;
-      var dy = y - lastY;
-      if (y < 80) requestFold(false);
-      else if (dy > 4 && y > 140) requestFold(true);
-      else if (dy < -4) requestFold(false);
-      if (Math.abs(dy) > 4 || y < 80) lastY = y;
+      if (y <= 8) requestFold(false);
+      else if (y > 60) requestFold(true);
     };
     window.addEventListener('scroll', function () {
       if (!foldTicking) { foldTicking = true; requestAnimationFrame(setFold); }
     }, { passive: true });
-    if (lastY > 140) { folded = wantFolded = true; siteHeader.classList.add('folded'); }
+    if (window.pageYOffset > 60) { folded = wantFolded = true; siteHeader.classList.add('folded'); }
 
     // Clicking the B (or the name on the home page) scrolls back to the top
     // instead of reloading the page
