@@ -106,11 +106,64 @@ button:focus-visible {
 }
 
 .home-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.2rem;
   font-family: var(--serif);
   font-weight: 600;
   font-size: 1.15rem;
   white-space: nowrap;
   transition: color 0.15s ease;
+}
+
+/* Scrolled down, the name folds into the B mark; back at the top it unfolds.
+   script.js toggles .folded on the header. */
+.home-link .name {
+  display: inline-block;
+  transform-origin: left center;
+  clip-path: inset(-0.2em -0.1em -0.2em 0);
+  transition:
+    clip-path 0.5s cubic-bezier(0.65, 0, 0.25, 1),
+    transform 0.5s cubic-bezier(0.65, 0, 0.25, 1),
+    opacity 0.35s ease;
+}
+
+.home-link .mark {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-top: -0.875rem;
+  opacity: 0;
+  transform: scale(0.35) rotate(-18deg);
+  transform-origin: 30% 50%;
+  transition:
+    transform 0.45s cubic-bezier(0.3, 1.45, 0.5, 1),
+    opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.folded .home-link .name {
+  clip-path: inset(-0.2em 100% -0.2em 0);
+  transform: translateX(-0.5em) scaleX(0.92);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.folded .home-link .mark {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.14s;
+  pointer-events: auto;
+}
+
+/* Unfolding, the name comes back after the mark steps aside */
+.site-header:not(.folded) .home-link .name { transition-delay: 0.08s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-link .name, .home-link .mark { transition: opacity 0.15s ease; }
 }
 
 .home-link:hover { color: var(--accent); }

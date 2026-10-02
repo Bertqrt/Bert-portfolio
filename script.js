@@ -4,6 +4,23 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Header: the name folds into the B mark once you scroll down,
+  // and unfolds when you come back to the top
+  var siteHeader = document.querySelector('.site-header');
+  if (siteHeader) {
+    var foldTicking = false;
+    var setFold = function () {
+      foldTicking = false;
+      var y = window.pageYOffset;
+      if (y > 140) siteHeader.classList.add('folded');
+      else if (y < 70) siteHeader.classList.remove('folded');
+    };
+    window.addEventListener('scroll', function () {
+      if (!foldTicking) { foldTicking = true; requestAnimationFrame(setFold); }
+    }, { passive: true });
+    setFold();
+  }
+
   // Theme toggle
   var toggle = document.getElementById('theme-toggle');
   if (toggle) {
