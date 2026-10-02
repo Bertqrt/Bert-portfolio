@@ -120,7 +120,34 @@
       });
     }, { rootMargin: '0px 0px -8% 0px' });
 
-    startReveal = function () { toReveal.forEach(function (el) { revealIo.observe(el); }); };
+    // Things at the very end of a page (like the footer's last row) can never
+    // rise above the trigger line, so once you reach the bottom, reveal
+    // whatever is still waiting.
+    var revealRest = function () {
+      var atBottom = window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4;
+      if (!atBottom) return;
+      var waiting = toReveal.filter(function (el) { return el.classList.contains('rv') && !el.classList.contains('in'); });
+      waiting.forEach(function (el, n) {
+        var delay = Math.min(n, 6) * 0.08;
+        el.style.setProperty('--rd', delay + 's');
+        el.classList.add('in');
+        revealIo.unobserve(el);
+        setTimeout(function () {
+          el.classList.remove('rv', 'in');
+          el.style.removeProperty('--rd');
+        }, (delay + 1) * 1000);
+      });
+    };
+    var restTicking = false;
+
+    startReveal = function () {
+      toReveal.forEach(function (el) { revealIo.observe(el); });
+      window.addEventListener('scroll', function () {
+        if (!restTicking) { restTicking = true; requestAnimationFrame(function () { restTicking = false; revealRest(); }); }
+      }, { passive: true });
+      window.addEventListener('resize', revealRest);
+      revealRest();
+    };
   }
 
   // ---------- Power-on screen (home page, first visit per session) ----------
