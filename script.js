@@ -27,22 +27,6 @@
     });
   });
 
-  // Local time in Accra
-  var clock = document.getElementById('accra-time');
-  if (clock) {
-    var tick = function () {
-      try {
-        clock.textContent = new Date().toLocaleTimeString('en-GB', {
-          timeZone: 'Africa/Accra',
-          hour: '2-digit',
-          minute: '2-digit'
-        });
-      } catch (e) {}
-    };
-    tick();
-    setInterval(tick, 20000);
-  }
-
   // ---------- Scroll reveal ----------
   // Elements rise and fade in as they enter the screen, staggered when several
   // arrive together. On the Journey page only the text moves, so the copper
