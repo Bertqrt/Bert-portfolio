@@ -94,59 +94,57 @@
     '.page-intro > *', '.filters',
     '.project > .project-num', '.project > .project-body', '.project > .spec', '.also',
     '.chapter > :not(.via)',
-    '.log li', '.updated', '.toolbox > *',
-    '.footer-big', '.contact-icons', '.footer-bottom'
+    '.log li', '.updated', '.toolbox > *'
   ].join(',');
+  // The footer is deliberately left out: it sits at the very end of every page,
+  // so it must never depend on a scroll trigger to become visible.
 
   var startReveal = function () {};
   if (!reduceMotion && 'IntersectionObserver' in window) {
     var toReveal = Array.prototype.slice.call(document.querySelectorAll(revealTargets));
     toReveal.forEach(function (el) { el.classList.add('rv'); });
 
-    var revealIo = new IntersectionObserver(function (entries) {
-      var batch = entries.filter(function (e) { return e.isIntersecting; })
-        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
-      batch.forEach(function (entry, n) {
-        var el = entry.target;
-        var delay = Math.min(n, 6) * 0.08;
-        el.style.setProperty('--rd', delay + 's');
-        el.classList.add('in');
-        revealIo.unobserve(el);
-        // hand the element back to its own transitions once it has arrived
-        setTimeout(function () {
-          el.classList.remove('rv', 'in');
-          el.style.removeProperty('--rd');
-        }, (delay + 1) * 1000);
-      });
-    }, { rootMargin: '0px 0px -8% 0px' });
+    var show = function (el, delay) {
+      if (!el.classList.contains('rv') || el.classList.contains('in')) return;
+      el.style.setProperty('--rd', delay + 's');
+      el.classList.add('in');
+      revealIo.unobserve(el);
+      // hand the element back to its own transitions once it has arrived
+      setTimeout(function () {
+        el.classList.remove('rv', 'in');
+        el.style.removeProperty('--rd');
+      }, (delay + 1) * 1000);
+    };
 
-    // Things at the very end of a page (like the footer's last row) can never
-    // rise above the trigger line, so once you reach the bottom, reveal
-    // whatever is still waiting.
-    var revealRest = function () {
-      var atBottom = window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4;
-      if (!atBottom) return;
-      var waiting = toReveal.filter(function (el) { return el.classList.contains('rv') && !el.classList.contains('in'); });
-      waiting.forEach(function (el, n) {
-        var delay = Math.min(n, 6) * 0.08;
-        el.style.setProperty('--rd', delay + 's');
-        el.classList.add('in');
-        revealIo.unobserve(el);
-        setTimeout(function () {
-          el.classList.remove('rv', 'in');
-          el.style.removeProperty('--rd');
-        }, (delay + 1) * 1000);
+    // Reveal as soon as any part of an element is on screen
+    var revealIo = new IntersectionObserver(function (entries) {
+      entries.filter(function (e) { return e.isIntersecting; })
+        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; })
+        .forEach(function (entry, n) { show(entry.target, Math.min(n, 6) * 0.08); });
+    }, { rootMargin: '0px', threshold: 0 });
+
+    // Safety net: whenever scrolling settles (or the window changes size),
+    // anything on screen that is somehow still hidden gets revealed, and at
+    // the bottom of the page everything left is revealed.
+    var settle = function () {
+      var h = window.innerHeight;
+      var atBottom = h + window.pageYOffset >= document.documentElement.scrollHeight - 40;
+      var n = 0;
+      toReveal.forEach(function (el) {
+        if (!el.classList.contains('rv') || el.classList.contains('in')) return;
+        if (atBottom || el.getBoundingClientRect().top < h) show(el, Math.min(n++, 6) * 0.08);
       });
     };
-    var restTicking = false;
+    var settleTimer = null;
+    var settleSoon = function () { clearTimeout(settleTimer); settleTimer = setTimeout(settle, 120); };
 
     startReveal = function () {
       toReveal.forEach(function (el) { revealIo.observe(el); });
-      window.addEventListener('scroll', function () {
-        if (!restTicking) { restTicking = true; requestAnimationFrame(function () { restTicking = false; revealRest(); }); }
-      }, { passive: true });
-      window.addEventListener('resize', revealRest);
-      revealRest();
+      window.addEventListener('scroll', settleSoon, { passive: true });
+      window.addEventListener('resize', settleSoon);
+      window.addEventListener('load', settleSoon);
+      window.addEventListener('pageshow', settleSoon);
+      settleSoon();
     };
   }
 
