@@ -1146,32 +1146,6 @@ html:not(.js) .drawer-inner { visibility: visible; }
 
 /* ---------- Journey ---------- */
 
-.quote {
-  margin: 0 0 4rem;
-  padding: 0.25rem 0 0.25rem 1.75rem;
-  border-left: 4px solid var(--accent);
-  max-width: 640px;
-}
-
-.quote p {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 600;
-  font-size: clamp(1.4rem, 3.6vw, 2rem);
-  line-height: 1.35;
-}
-
-.quote cite {
-  display: block;
-  margin-top: 0.75rem;
-  font-style: normal;
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-.quote cite a { border-bottom: 1px solid var(--line); }
-.quote cite a:hover { color: var(--accent); border-color: var(--accent); }
-
 .journey {
   position: relative;
   list-style: none;
@@ -1591,7 +1565,6 @@ html:not(.js) .chapter::before {
   .bench .player, .bench-log { width: 100%; max-width: 300px; }
   .drawer-toggle { margin-top: 1rem; }
 
-  .quote { margin-bottom: 3rem; padding-left: 1.25rem; }
 
   .journey { --step: 0rem; }
   .chapter { padding: 0 0 3rem 2.4rem; }

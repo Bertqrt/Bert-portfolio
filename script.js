@@ -53,7 +53,7 @@
     '.feature > *', '.split > div > .feature-label', '.writing-list li', '.writing-more',
     '.page-intro > *', '.filters',
     '.project > .project-num', '.project > .project-body', '.project > .spec', '.also',
-    '.quote', '.chapter > :not(.via)',
+    '.chapter > :not(.via)',
     '.log li', '.updated', '.toolbox > *',
     '.footer-big', '.contact-icons', '.footer-bottom'
   ].join(',');
