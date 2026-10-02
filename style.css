@@ -127,7 +127,7 @@ button:focus-visible {
   display: inline-block;
   white-space: pre;
   transition:
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--unfold-d, 0ms),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--unfold-d, 0ms),
     opacity 0.4s ease var(--unfold-d, 0ms),
     filter 0.4s ease var(--unfold-d, 0ms);
 }
@@ -137,7 +137,7 @@ button:focus-visible {
   opacity: 0;
   filter: blur(1.5px);
   transition:
-    transform 0.5s cubic-bezier(0.55, 0, 0.45, 1) var(--fold-d, 0ms),
+    transform 0.45s cubic-bezier(0.55, 0, 0.45, 1) var(--fold-d, 0ms),
     opacity 0.32s ease calc(var(--fold-d, 0ms) + 0.12s),
     filter 0.32s ease calc(var(--fold-d, 0ms) + 0.12s);
 }
@@ -163,8 +163,8 @@ button:focus-visible {
   transform: none;
   /* lands once the letters have mostly gathered into it */
   transition:
-    transform 0.6s cubic-bezier(0.22, 1.25, 0.36, 1) 0.38s,
-    opacity 0.3s ease 0.38s;
+    transform 0.5s cubic-bezier(0.22, 1.25, 0.36, 1) 0.3s,
+    opacity 0.28s ease 0.3s;
   pointer-events: auto;
 }
 

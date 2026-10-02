@@ -25,12 +25,27 @@
     var measure = function () {
       chars.forEach(function (span, n) {
         span.style.setProperty('--x', (-span.offsetLeft * 0.55).toFixed(1) + 'px');
-        span.style.setProperty('--fold-d', ((last - n) * 14) + 'ms');
-        span.style.setProperty('--unfold-d', (60 + n * 14) + 'ms');
+        span.style.setProperty('--fold-d', ((last - n) * 11) + 'ms');
+        span.style.setProperty('--unfold-d', (40 + n * 11) + 'ms');
       });
     };
     measure();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+    // A fold or unfold always plays to the end. If the scroll direction flips
+    // meanwhile, the latest wish is remembered and played right after, so
+    // fast up-and-down scrolling can never leave the name half folded.
+    var FOLD_MS = reduceMotion ? 160 : 680;
+    var UNFOLD_MS = reduceMotion ? 160 : 760;
+    var folded = false, wantFolded = false, foldBusy = false;
+    var applyFold = function () {
+      if (foldBusy || wantFolded === folded) return;
+      folded = wantFolded;
+      siteHeader.classList.toggle('folded', folded);
+      foldBusy = true;
+      setTimeout(function () { foldBusy = false; applyFold(); }, folded ? FOLD_MS : UNFOLD_MS);
+    };
+    var requestFold = function (state) { wantFolded = state; applyFold(); };
 
     var lastY = window.pageYOffset;
     var foldTicking = false;
@@ -38,21 +53,21 @@
       foldTicking = false;
       var y = window.pageYOffset;
       var dy = y - lastY;
-      if (y < 80) siteHeader.classList.remove('folded');
-      else if (dy > 4 && y > 140) siteHeader.classList.add('folded');
-      else if (dy < -4) siteHeader.classList.remove('folded');
+      if (y < 80) requestFold(false);
+      else if (dy > 4 && y > 140) requestFold(true);
+      else if (dy < -4) requestFold(false);
       if (Math.abs(dy) > 4 || y < 80) lastY = y;
     };
     window.addEventListener('scroll', function () {
       if (!foldTicking) { foldTicking = true; requestAnimationFrame(setFold); }
     }, { passive: true });
-    if (lastY > 140) siteHeader.classList.add('folded');
+    if (lastY > 140) { folded = wantFolded = true; siteHeader.classList.add('folded'); }
 
     // Clicking the B (or the name on the home page) scrolls back to the top
     // instead of reloading the page
     var onHome = homeLink.getAttribute('aria-current') === 'page';
     homeLink.addEventListener('click', function (e) {
-      if (siteHeader.classList.contains('folded') || onHome) {
+      if (folded || onHome) {
         e.preventDefault();
         homeLink.blur();
         window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
