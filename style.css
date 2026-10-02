@@ -117,16 +117,29 @@ button:focus-visible {
   transition: color 0.15s ease;
 }
 
-/* Scrolled down, the name folds into the B mark; back at the top it unfolds.
-   script.js toggles .folded on the header. */
-.home-link .name {
+/* Scrolled down, the name folds into the B mark: the letters glide toward the
+   B and fade one after another from the end, and the serif B crossfades into
+   the mark. Scrolling up plays it in reverse. script.js splits the name into
+   letters and toggles .folded on the header. */
+.home-link .name { display: inline-block; }
+
+.home-link .ch {
   display: inline-block;
-  transform-origin: left center;
-  clip-path: inset(-0.2em -0.1em -0.2em 0);
+  white-space: pre;
   transition:
-    clip-path 0.5s cubic-bezier(0.65, 0, 0.25, 1),
-    transform 0.5s cubic-bezier(0.65, 0, 0.25, 1),
-    opacity 0.35s ease;
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) var(--unfold-d, 0ms),
+    opacity 0.4s ease var(--unfold-d, 0ms),
+    filter 0.4s ease var(--unfold-d, 0ms);
+}
+
+.folded .home-link .ch {
+  transform: translateX(var(--x, 0));
+  opacity: 0;
+  filter: blur(1.5px);
+  transition:
+    transform 0.5s cubic-bezier(0.55, 0, 0.45, 1) var(--fold-d, 0ms),
+    opacity 0.32s ease calc(var(--fold-d, 0ms) + 0.12s),
+    filter 0.32s ease calc(var(--fold-d, 0ms) + 0.12s);
 }
 
 .home-link .mark {
@@ -137,33 +150,29 @@ button:focus-visible {
   height: 1.75rem;
   margin-top: -0.875rem;
   opacity: 0;
-  transform: scale(0.35) rotate(-18deg);
-  transform-origin: 30% 50%;
+  transform: scale(0.72);
+  transform-origin: 20% 55%;
   transition:
-    transform 0.45s cubic-bezier(0.3, 1.45, 0.5, 1),
-    opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.folded .home-link .name {
-  clip-path: inset(-0.2em 100% -0.2em 0);
-  transform: translateX(-0.5em) scaleX(0.92);
-  opacity: 0;
+    transform 0.35s cubic-bezier(0.4, 0, 0.6, 1),
+    opacity 0.22s ease;
   pointer-events: none;
 }
 
 .folded .home-link .mark {
   opacity: 1;
   transform: none;
-  transition-delay: 0.14s;
+  /* lands once the letters have mostly gathered into it */
+  transition:
+    transform 0.6s cubic-bezier(0.22, 1.25, 0.36, 1) 0.38s,
+    opacity 0.3s ease 0.38s;
   pointer-events: auto;
 }
 
-/* Unfolding, the name comes back after the mark steps aside */
-.site-header:not(.folded) .home-link .name { transition-delay: 0.08s; }
+.folded .home-link .name { pointer-events: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-link .name, .home-link .mark { transition: opacity 0.15s ease; }
+  .home-link .ch, .folded .home-link .ch,
+  .home-link .mark, .folded .home-link .mark { transition: opacity 0.15s ease; transform: none; filter: none; }
 }
 
 .home-link:hover { color: var(--accent); }

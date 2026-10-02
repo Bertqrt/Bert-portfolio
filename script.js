@@ -4,21 +4,60 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Header: the name folds into the B mark once you scroll down,
-  // and unfolds when you come back to the top
+  // Header: the name folds into the B mark as you scroll down and unfolds
+  // as soon as you scroll back up. Each letter is its own span so they can
+  // glide into the B one after another.
   var siteHeader = document.querySelector('.site-header');
-  if (siteHeader) {
+  var homeLink = document.querySelector('.home-link');
+  var nameEl = homeLink && homeLink.querySelector('.name');
+  if (siteHeader && nameEl) {
+    var text = nameEl.textContent;
+    nameEl.textContent = '';
+    var chars = text.split('').map(function (ch, n) {
+      var span = document.createElement('span');
+      span.className = 'ch';
+      span.textContent = ch;
+      nameEl.appendChild(span);
+      return span;
+    });
+    // how far each letter travels toward the B, and when it leaves / returns
+    var last = chars.length - 1;
+    var measure = function () {
+      chars.forEach(function (span, n) {
+        span.style.setProperty('--x', (-span.offsetLeft * 0.55).toFixed(1) + 'px');
+        span.style.setProperty('--fold-d', ((last - n) * 14) + 'ms');
+        span.style.setProperty('--unfold-d', (60 + n * 14) + 'ms');
+      });
+    };
+    measure();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+    var lastY = window.pageYOffset;
     var foldTicking = false;
     var setFold = function () {
       foldTicking = false;
       var y = window.pageYOffset;
-      if (y > 140) siteHeader.classList.add('folded');
-      else if (y < 70) siteHeader.classList.remove('folded');
+      var dy = y - lastY;
+      if (y < 80) siteHeader.classList.remove('folded');
+      else if (dy > 4 && y > 140) siteHeader.classList.add('folded');
+      else if (dy < -4) siteHeader.classList.remove('folded');
+      if (Math.abs(dy) > 4 || y < 80) lastY = y;
     };
     window.addEventListener('scroll', function () {
       if (!foldTicking) { foldTicking = true; requestAnimationFrame(setFold); }
     }, { passive: true });
-    setFold();
+    if (lastY > 140) siteHeader.classList.add('folded');
+
+    // Clicking the B (or the name on the home page) scrolls back to the top
+    // instead of reloading the page
+    var onHome = homeLink.getAttribute('aria-current') === 'page';
+    homeLink.addEventListener('click', function (e) {
+      if (siteHeader.classList.contains('folded') || onHome) {
+        e.preventDefault();
+        homeLink.blur();
+        window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+    });
   }
 
   // Theme toggle
