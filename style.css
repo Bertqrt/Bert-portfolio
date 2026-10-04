@@ -715,6 +715,39 @@ button:focus-visible {
   max-width: 40ch;
 }
 
+/* Explicit way back to the home page, above each page title */
+.back-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1.75rem;
+  padding: 0.5rem 0.95rem 0.5rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-deep);
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.back-home svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.back-home:hover {
+  color: var(--ink);
+  border-color: var(--copper);
+}
+
+.back-home:hover svg { transform: translateX(-3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .back-home:hover svg { transform: none; }
+}
+
 /* ---------- Projects ---------- */
 
 .filters {
