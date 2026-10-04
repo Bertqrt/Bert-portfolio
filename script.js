@@ -4,6 +4,12 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Low-memory phones (around 4 GB or less, like a Galaxy A0x) and data
+  // savers skip the scroll reveals: each revealed block gets its own GPU layer
+  // and is painted twice, which is what makes cheap phones stutter.
+  var conn = navigator.connection;
+  var lite = (navigator.deviceMemory && navigator.deviceMemory <= 4) || !!(conn && conn.saveData);
+
   // Header: the name folds into the B mark as you scroll down and unfolds
   // only when you are back at the very top. Each letter is its own span so they can
   // glide into the B one after another.
@@ -111,54 +117,53 @@
   ].join(',');
 
   var startReveal = function () {};
-  if (!reduceMotion && 'IntersectionObserver' in window) {
+  if (!reduceMotion && !lite && 'IntersectionObserver' in window) {
     var toReveal = Array.prototype.slice.call(document.querySelectorAll(revealTargets));
     toReveal.forEach(function (el) { el.classList.add('rv'); });
 
-    var revealIo = new IntersectionObserver(function (entries) {
-      var batch = entries.filter(function (e) { return e.isIntersecting; })
-        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
-      batch.forEach(function (entry, n) {
-        var el = entry.target;
-        var delay = Math.min(n, 6) * 0.08;
-        el.style.setProperty('--rd', delay + 's');
+    // Reveal a batch, staggered top to bottom. The delay goes straight on
+    // transition-delay (not a custom property, which would restyle every
+    // descendant), and the whole batch is cleaned up in one go afterwards.
+    var reveal = function (els) {
+      els.forEach(function (el, n) {
+        el.style.transitionDelay = Math.min(n, 6) * 0.08 + 's';
         el.classList.add('in');
         revealIo.unobserve(el);
-        // hand the element back to its own transitions once it has arrived
-        setTimeout(function () {
-          el.classList.remove('rv', 'in');
-          el.style.removeProperty('--rd');
-        }, (delay + 1) * 1000);
       });
+      // hand the elements back to their own transitions once they have arrived
+      setTimeout(function () {
+        els.forEach(function (el) {
+          el.classList.remove('rv', 'in');
+          el.style.transitionDelay = '';
+        });
+      }, Math.min(els.length - 1, 6) * 80 + 1000);
+    };
+
+    var revealIo = new IntersectionObserver(function (entries) {
+      var batch = entries.filter(function (e) { return e.isIntersecting; })
+        .sort(function (a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; })
+        .map(function (e) { return e.target; });
+      if (batch.length) reveal(batch);
     }, { rootMargin: '0px 0px -8% 0px' });
 
     // Things at the very end of a page (like the footer's last row) can never
     // rise above the trigger line, so once you reach the bottom, reveal
-    // whatever is still waiting.
-    var revealRest = function () {
-      var atBottom = window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 4;
-      if (!atBottom) return;
+    // whatever is still waiting. A marker at the end of the page tells us
+    // when that happens without measuring the page on every scroll.
+    var endMark = document.createElement('div');
+    endMark.setAttribute('aria-hidden', 'true');
+    endMark.style.cssText = 'height:1px;margin-top:-1px;pointer-events:none';
+    document.body.appendChild(endMark);
+    var endIo = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
       var waiting = toReveal.filter(function (el) { return el.classList.contains('rv') && !el.classList.contains('in'); });
-      waiting.forEach(function (el, n) {
-        var delay = Math.min(n, 6) * 0.08;
-        el.style.setProperty('--rd', delay + 's');
-        el.classList.add('in');
-        revealIo.unobserve(el);
-        setTimeout(function () {
-          el.classList.remove('rv', 'in');
-          el.style.removeProperty('--rd');
-        }, (delay + 1) * 1000);
-      });
-    };
-    var restTicking = false;
+      if (waiting.length) reveal(waiting);
+      else endIo.disconnect();
+    });
 
     startReveal = function () {
       toReveal.forEach(function (el) { revealIo.observe(el); });
-      window.addEventListener('scroll', function () {
-        if (!restTicking) { restTicking = true; requestAnimationFrame(function () { restTicking = false; revealRest(); }); }
-      }, { passive: true });
-      window.addEventListener('resize', revealRest);
-      revealRest();
+      endIo.observe(endMark);
     };
   }
 
@@ -196,10 +201,16 @@
   // Back to top
   var backToTop = document.getElementById('back-to-top');
   if (backToTop) {
+    // checked once per frame at most, and the class only changes when needed
+    var shown = false, topTicking = false;
     var onScroll = function () {
-      backToTop.classList.toggle('visible', window.pageYOffset > 500);
+      topTicking = false;
+      var want = window.pageYOffset > 500;
+      if (want !== shown) { shown = want; backToTop.classList.toggle('visible', shown); }
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', function () {
+      if (!topTicking) { topTicking = true; requestAnimationFrame(onScroll); }
+    }, { passive: true });
     onScroll();
     var footer = document.querySelector('.site-footer');
     if (footer && 'IntersectionObserver' in window) {
@@ -399,44 +410,41 @@
 
   // Journey: draw a copper trace through every via, with 45 degree bends like a
   // real PCB, and fill it with "current" as you scroll down the page.
+  // The copper copy sits in a clipping box: scrolling slides the box down and
+  // the trace back up by the same amount, so the fill is only ever moved by
+  // the GPU and never repainted.
   var journey = document.querySelector('.journey');
   if (journey) {
     var NS = 'http://www.w3.org/2000/svg';
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('class', 'journey-trace');
-    svg.setAttribute('aria-hidden', 'true');
-    var bed = document.createElementNS(NS, 'path');
-    var live = document.createElementNS(NS, 'path');
-    [bed, live].forEach(function (p) {
-      p.setAttribute('fill', 'none');
-      p.setAttribute('stroke-width', '3');
-      p.setAttribute('stroke-linejoin', 'round');
-      p.setAttribute('stroke-linecap', 'round');
-      svg.appendChild(p);
-    });
-    bed.setAttribute('class', 'bed');
-    live.setAttribute('class', 'live');
-    journey.insertBefore(svg, journey.firstChild);
+    var makeTrace = function (cls) {
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('class', 'journey-trace');
+      svg.setAttribute('aria-hidden', 'true');
+      var path = document.createElementNS(NS, 'path');
+      path.setAttribute('class', cls);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke-width', '3');
+      path.setAttribute('stroke-linejoin', 'round');
+      path.setAttribute('stroke-linecap', 'round');
+      svg.appendChild(path);
+      return { svg: svg, path: path };
+    };
+    var bed = makeTrace('bed');
+    var live = makeTrace('live');
+    var fill = document.createElement('div');
+    fill.className = 'journey-fill';
+    fill.setAttribute('aria-hidden', 'true');
+    fill.appendChild(live.svg);
+    journey.insertBefore(fill, journey.firstChild);
+    journey.insertBefore(bed.svg, journey.firstChild);
 
     var chapters = journey.querySelectorAll('.chapter');
     var points = [];
-    var samples = [];
-    var length = 0;
-
-    var lengthAtY = function (y) {
-      if (y <= samples[0].y) return 0;
-      for (var i = 1; i < samples.length; i++) {
-        if (samples[i].y >= y) {
-          var a = samples[i - 1], b = samples[i];
-          var t = b.y === a.y ? 1 : (y - a.y) / (b.y - a.y);
-          return a.len + t * (b.len - a.len);
-        }
-      }
-      return length;
-    };
+    var height = 0;
 
     var draw = function () {
       var box = journey.getBoundingClientRect();
+      height = box.height;
       points = [];
       chapters.forEach(function (ch) {
         var via = ch.querySelector('.via').getBoundingClientRect();
@@ -456,29 +464,29 @@
           d += ' L' + b.x + ' ' + b.y;
         }
       }
-      bed.setAttribute('d', d);
-      live.setAttribute('d', d);
-      length = live.getTotalLength();
-      live.style.strokeDasharray = length;
-
-      // The path is longer than it is tall because of the jogs, so map
-      // heights to lengths by sampling along it.
-      samples = [];
-      for (var s = 0; s <= 300; s++) {
-        var len = length * s / 300;
-        samples.push({ len: len, y: live.getPointAtLength(len).y });
-      }
+      bed.path.setAttribute('d', d);
+      live.path.setAttribute('d', d);
+      shownCut = -1;
       update();
     };
 
+    // Only touch the page when the fill has actually moved, so scrolling
+    // past the filled or empty parts costs nothing
+    var shownCut = -1;
     var update = function () {
       if (!points.length) return;
       var box = journey.getBoundingClientRect();
       // the "current" reaches as far as 60% down the screen
       var reach = window.innerHeight * 0.6 - box.top;
-      live.style.strokeDashoffset = length - lengthAtY(reach);
+      var cut = Math.round(height - Math.max(0, Math.min(height, reach)));
+      if (cut !== shownCut) {
+        shownCut = cut;
+        fill.style.transform = 'translate3d(0,' + (-cut) + 'px,0)';
+        live.svg.style.transform = 'translate3d(0,' + cut + 'px,0)';
+      }
       points.forEach(function (p) {
-        p.el.classList.toggle('lit', reach >= p.y - 4);
+        var lit = reach >= p.y - 4;
+        if (lit !== p.lit) { p.lit = lit; p.el.classList.toggle('lit', lit); }
       });
     };
 
