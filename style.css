@@ -1320,11 +1320,24 @@ html:not(.js) .chapter::before {
   border-radius: 50%;
   background: var(--paper);
   border: 3px solid var(--line);
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  transition: border-color 0.3s ease;
   z-index: 1;
 }
 
-.chapter.lit .via { border-color: var(--copper); background: var(--copper); box-shadow: 0 0 0 4px var(--paper); }
+/* Lighting up fades in a copper disc on top; fading opacity runs on the
+   GPU, where fading the via's own colours would repaint every frame */
+.via::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--copper);
+  box-shadow: 0 0 0 4px var(--paper);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.chapter.lit .via::after { opacity: 1; }
 
 .chapter-num {
   display: block;
@@ -1349,7 +1362,8 @@ html:not(.js) .chapter::before {
 .chapter .link { display: inline-block; margin-top: 0.9rem; font-size: 0.92rem; }
 
 .chapter.next h2 { color: var(--ink-soft); }
-.chapter.next .via { border-style: dashed; background: var(--paper); box-shadow: none; }
+.chapter.next .via { border-style: dashed; }
+.chapter.next .via::after { display: none; }
 .chapter.next.lit .via { border-color: var(--accent); }
 
 .goals {
