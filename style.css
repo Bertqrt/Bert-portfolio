@@ -12,6 +12,7 @@ a, button { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
   --copper: #9e4b1d; /* etched copper */
   --line: #e4ded2;
   --header-bg: rgba(250, 247, 242, 0.72);
+  --header-solid: rgba(250, 247, 242, 0.96);
   --glass-tint: rgba(250, 247, 242, 0.45);
   --glass-rim: rgba(255, 255, 255, 0.8);
   --glass-edge: rgba(35, 32, 27, 0.1);
@@ -35,6 +36,7 @@ a, button { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
   --copper: #df865a;
   --line: #34302a;
   --header-bg: rgba(27, 24, 21, 0.72);
+  --header-solid: rgba(27, 24, 21, 0.96);
   --glass-tint: rgba(42, 38, 33, 0.45);
   --glass-rim: rgba(255, 255, 255, 0.12);
   --glass-edge: rgba(255, 255, 255, 0.08);
@@ -84,18 +86,25 @@ button:focus-visible {
 
 /* ---------- Header (glass, like the blog) ---------- */
 
+/* The blur behind the header has to be redrawn on every frame of a scroll,
+   which phone GPUs struggle with, so phones get a near-solid header and only
+   mouse-driven computers get the frosted glass. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--header-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--header-solid);
   border-bottom: 1px solid var(--line);
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header { background: var(--paper); }
+@media (hover: hover) and (pointer: fine) {
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .site-header {
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+  }
 }
 
 .header-inner {
@@ -128,18 +137,15 @@ button:focus-visible {
   white-space: pre;
   transition:
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--unfold-d, 0ms),
-    opacity 0.4s ease var(--unfold-d, 0ms),
-    filter 0.4s ease var(--unfold-d, 0ms);
+    opacity 0.4s ease var(--unfold-d, 0ms);
 }
 
 .folded .home-link .ch {
   transform: translateX(var(--x, 0));
   opacity: 0;
-  filter: blur(1.5px);
   transition:
     transform 0.45s cubic-bezier(0.55, 0, 0.45, 1) var(--fold-d, 0ms),
-    opacity 0.32s ease calc(var(--fold-d, 0ms) + 0.12s),
-    filter 0.32s ease calc(var(--fold-d, 0ms) + 0.12s);
+    opacity 0.32s ease calc(var(--fold-d, 0ms) + 0.12s);
 }
 
 .home-link .mark {
@@ -172,7 +178,7 @@ button:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   .home-link .ch, .folded .home-link .ch,
-  .home-link .mark, .folded .home-link .mark { transition: opacity 0.15s ease; transform: none; filter: none; }
+  .home-link .mark, .folded .home-link .mark { transition: opacity 0.15s ease; transform: none; }
 }
 
 .home-link:hover { color: var(--accent); }
@@ -1272,6 +1278,17 @@ html:not(.js) .drawer-inner { visibility: visible; }
   pointer-events: none;
 }
 
+/* Clips the copper copy of the trace; script.js slides it as you scroll */
+.journey-fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.journey-fill .journey-trace { will-change: transform; }
+
 .journey-trace .bed { stroke: var(--line); }
 .journey-trace .live { stroke: var(--copper); }
 
@@ -1482,9 +1499,7 @@ html:not(.js) .chapter::before {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: var(--glass-tint);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--header-solid);
   color: var(--accent);
   border: 1px solid var(--glass-edge);
   box-shadow:
@@ -1527,8 +1542,14 @@ html:not(.js) .chapter::before {
 .back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
 .back-to-top svg { width: 20px; height: 20px; position: relative; }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .back-to-top { background: var(--paper); }
+@media (hover: hover) and (pointer: fine) {
+  @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .back-to-top:not(.over-footer) {
+      background: var(--glass-tint);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+  }
 }
 
 /* ---------- Tablet ---------- */
@@ -1775,8 +1796,8 @@ html:not(.js) .chapter::before {
     opacity: 0;
     transform: translate3d(0, 32px, 0);
     transition:
-      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) var(--rd, 0s),
-      transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) var(--rd, 0s);
+      opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 0.85s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   .js .rv.in { opacity: 1; transform: none; }
 
