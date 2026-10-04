@@ -719,31 +719,47 @@ button:focus-visible {
 .back-home {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-  padding: 0.4rem 0;
+  gap: 0.55rem;
+  min-height: 44px;
+  margin-bottom: 1rem;
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  transition: color 0.15s ease;
+  color: var(--ink);
+  /* Same copper underline as .link, drawn under the words only (the
+     SVG arrow is a replaced element, so the decoration skips it) */
+  text-decoration: underline;
+  text-decoration-color: var(--copper);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+  transition: color 0.15s ease, text-underline-offset 0.15s ease;
 }
 
 .back-home svg {
-  width: 0.95rem;
-  height: 0.95rem;
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
   color: var(--copper);
   transition: transform 0.2s ease;
 }
 
-.back-home:hover { color: var(--ink); }
+.back-home:hover,
+.back-home:focus-visible {
+  color: var(--copper);
+  text-underline-offset: 4px;
+}
 
-.back-home:hover svg { transform: translateX(-3px); }
+.back-home:hover svg,
+.back-home:focus-visible svg { transform: translateX(-4px); }
+
+.back-home:active { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
-  .back-home:hover svg { transform: none; }
+  .back-home { transition: none; }
+  .back-home:hover svg,
+  .back-home:focus-visible svg { transform: none; }
 }
 
 /* ---------- Projects ---------- */
