@@ -116,7 +116,6 @@
     '.footer-big', '.contact-icons', '.footer-bottom'
   ].join(',');
 
-  var startReveal = function () {};
   if (!reduceMotion && !lite && 'IntersectionObserver' in window) {
     var toReveal = Array.prototype.slice.call(document.querySelectorAll(revealTargets));
     toReveal.forEach(function (el) { el.classList.add('rv'); });
@@ -161,25 +160,8 @@
       else endIo.disconnect();
     });
 
-    startReveal = function () {
-      toReveal.forEach(function (el) { revealIo.observe(el); });
-      endIo.observe(endMark);
-    };
-  }
-
-  // ---------- Power-on screen (home page, first visit per session) ----------
-  var bootScreen = document.querySelector('.boot-screen');
-  if (root.classList.contains('boot') && bootScreen) {
-    try { sessionStorage.setItem('booted', '1'); } catch (e) {}
-    setTimeout(function () {
-      bootScreen.classList.add('leave');
-      // the page starts building just as the screen lifts
-      setTimeout(function () { root.classList.remove('booting'); startReveal(); }, 250);
-      setTimeout(function () { root.classList.remove('boot'); }, 700);
-    }, 1350);
-  } else {
-    root.classList.remove('boot', 'booting');
-    startReveal();
+    toReveal.forEach(function (el) { revealIo.observe(el); });
+    endIo.observe(endMark);
   }
 
   // Power up the chip on the home page when it scrolls into view

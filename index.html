@@ -25,27 +25,12 @@
       document.documentElement.setAttribute('data-theme', theme);
     })();
   </script>
-  <script>
-    // First visit this session: show the power-on screen before the page paints
-    (function () {
-      try {
-        if (sessionStorage.getItem('booted')) return;
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        document.documentElement.classList.add('boot', 'booting');
-      } catch (e) {}
-    })();
-  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=23">
+  <link rel="stylesheet" href="style.css?v=24">
 </head>
 <body>
-  <div class="boot-screen" aria-hidden="true">
-    <div class="boot-chip"><span class="boot-notch"></span><span class="boot-name">BERT<br>BOSU</span></div>
-    <div class="boot-trace"><span class="boot-fill"></span><span class="boot-via"></span></div>
-    <p class="boot-text">powering up</p>
-  </div>
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="home-link" href="index.html" aria-label="Bertrand Osei-Owusu Bosu, home" aria-current="page"><svg class="mark" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="M12 8H32V92H12Z"/><path d="M37 8H56A18.5 18.5 0 0 1 56 45H37Z"/><path d="M37 50H60A21 21 0 0 1 60 92H37Z"/></svg><span class="name">Bertrand Osei-Owusu Bosu</span></a>
@@ -143,6 +128,6 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
-  <script src="script.js?v=23"></script>
+  <script src="script.js?v=24"></script>
 </body>
 </html>
