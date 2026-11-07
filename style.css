@@ -2580,3 +2580,30 @@ html.theming *::after {
     stroke 0.3s ease,
     box-shadow 0.3s ease !important;
 }
+
+/* ---------- Our own cursor (script.js): the normal pointer is hidden while
+   the dot and ring are showing ---------- */
+
+html.own-cursor,
+html.own-cursor *,
+html.own-cursor .stage-canvas { cursor: none !important; }
+
+.cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 62;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--copper);
+  box-shadow: 0 0 0 1.5px var(--paper);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, scale 0.25s var(--ease-spring);
+}
+
+.cursor-dot.on { opacity: 1; }
+.cursor-dot.link { scale: 0.6; }
+.cursor-dot.down { scale: 1.6; }

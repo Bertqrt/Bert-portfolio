@@ -1169,7 +1169,7 @@
         root.classList.remove('has-3d');
         window.dispatchEvent(new Event('resize'));
       };
-      import('./hero3d.js?v=28').then(function (m) {
+      import('./hero3d.js?v=29').then(function (m) {
         m.start(stage, {
           mobile: !finePointer,
           onReady: function () { stage.classList.add('ready'); },
@@ -1179,13 +1179,19 @@
     }
   }
 
-  // ---------- A copper ring that follows the cursor ----------
+  // ---------- Our own cursor: a dot that sits exactly on the mouse and a
+  // copper ring that trails it. The normal pointer is hidden while ours is
+  // showing, and comes back in fullscreen video. Mouse only, never touch. ----
   if (finePointer && rich) {
     var ringEl = document.createElement('div');
     ringEl.className = 'cursor-ring';
     ringEl.setAttribute('aria-hidden', 'true');
     ringEl.innerHTML = '<span>click</span>';
+    var dotEl = document.createElement('div');
+    dotEl.className = 'cursor-dot';
+    dotEl.setAttribute('aria-hidden', 'true');
     document.body.appendChild(ringEl);
+    document.body.appendChild(dotEl);
     var mx = -100, my = -100, rx = -100, ry = -100, ringRaf = 0;
     var ringLoop = function () {
       rx += (mx - rx) * 0.22;
@@ -1193,18 +1199,29 @@
       ringEl.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0)';
       ringRaf = (Math.abs(mx - rx) + Math.abs(my - ry) > 0.3) ? requestAnimationFrame(ringLoop) : 0;
     };
+    var showCursor = function (on) {
+      ringEl.classList.toggle('on', on);
+      dotEl.classList.toggle('on', on);
+      root.classList.toggle('own-cursor', on && !document.fullscreenElement);
+    };
     window.addEventListener('pointermove', function (e) {
-      if (e.pointerType !== 'mouse') return;
+      if (e.pointerType !== 'mouse') { if (ringEl.classList.contains('on')) showCursor(false); return; }
       mx = e.clientX; my = e.clientY;
-      if (!ringEl.classList.contains('on')) { rx = mx; ry = my; ringEl.classList.add('on'); }
+      dotEl.style.translate = mx + 'px ' + my + 'px';
+      if (!ringEl.classList.contains('on')) { rx = mx; ry = my; showCursor(true); }
       var overPart = !!(stage && stage.classList.contains('over-part') && e.target.classList && e.target.classList.contains('stage-canvas'));
+      var overLink = !overPart && !!(e.target.closest && e.target.closest('a, button, [data-seek], .c, input'));
       ringEl.classList.toggle('part', overPart);
-      ringEl.classList.toggle('link', !overPart && !!(e.target.closest && e.target.closest('a, button, [data-seek], .c')));
+      ringEl.classList.toggle('link', overLink);
+      dotEl.classList.toggle('link', overLink || overPart);
       if (!ringRaf) ringRaf = requestAnimationFrame(ringLoop);
     }, { passive: true });
-    document.documentElement.addEventListener('mouseleave', function () { ringEl.classList.remove('on'); });
-    window.addEventListener('pointerdown', function () { ringEl.classList.add('down'); });
-    window.addEventListener('pointerup', function () { ringEl.classList.remove('down'); });
+    document.documentElement.addEventListener('mouseleave', function () { showCursor(false); });
+    document.addEventListener('fullscreenchange', function () {
+      root.classList.toggle('own-cursor', !document.fullscreenElement && ringEl.classList.contains('on'));
+    });
+    window.addEventListener('pointerdown', function () { ringEl.classList.add('down'); dotEl.classList.add('down'); });
+    window.addEventListener('pointerup', function () { ringEl.classList.remove('down'); dotEl.classList.remove('down'); });
   }
 
   // ---------- Copper sparks wherever you click ----------
