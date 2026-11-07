@@ -102,114 +102,37 @@
   };
 
   // ---------- Theme toggle ----------
-  // Switching themes is wired like a power switch on an old CRT:
-  //   light to dark: the page collapses into a glowing line, then a dot, and
-  //   disappears into the toggle, while the dark page fades up behind it.
-  //   dark to light: a dot sparks at the toggle, shoots out into a line,
-  //   opens into the full page and flickers on like a fluorescent tube.
-  // The toggle itself spins its icon over the top. Afterwards the hero
-  // letters hop in a wave (and the 3D board surges, see hero3d.js).
-  // Browsers without view transitions get a smooth colour fade instead;
-  // lighter devices get a simple circle reveal.
+  // Quick and simple: the new theme spreads out in a circle from the
+  // button. Without view transitions the colours fade across.
   var toggle = document.getElementById('theme-toggle');
   if (toggle) {
-    var themeBusy = false;
-    toggle.addEventListener('animationend', function () { toggle.classList.remove('spin'); });
-
-    var heroWave = function () {
-      if (!rich) return;
-      document.querySelectorAll('.hero .chars-ready .c, .site-footer .chars-ready .c').forEach(function (c, i) {
-        setTimeout(function () {
-          c.classList.remove('hop');
-          void c.offsetWidth;
-          c.style.transitionDelay = '0s';
-          c.classList.add('hop');
-        }, i * 35);
-      });
-    };
-
     toggle.addEventListener('click', function () {
-      if (themeBusy) return;
       var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
       var apply = function () {
         root.setAttribute('data-theme', next);
         try { localStorage.setItem('theme', next); } catch (e) {}
       };
 
-      // No view transitions (or reduced motion): fade the colours across
       if (reduceMotion || !document.startViewTransition) {
-        toggle.classList.remove('spin');
-        void toggle.offsetWidth;
-        toggle.classList.add('spin');
         root.classList.add('theming');
         apply();
-        setTimeout(function () { root.classList.remove('theming'); }, 700);
+        setTimeout(function () { root.classList.remove('theming'); }, 350);
         return;
       }
 
       var r = toggle.getBoundingClientRect();
       var x = r.left + r.width / 2;
       var y = r.top + r.height / 2;
-      var origin = x + 'px ' + y + 'px';
-      var goingDark = next === 'dark';
-
-      themeBusy = true;
+      var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
       root.classList.add('theme-vt');
-      if (rich) root.classList.add(goingDark ? 'theme-off' : 'theme-on');
-
       var t = document.startViewTransition(apply);
       t.ready.then(function () {
-        if (!rich) {
-          var end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-          root.animate(
-            { clipPath: ['circle(0px at ' + origin + ')', 'circle(' + end + 'px at ' + origin + ')'] },
-            { duration: 700, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', pseudoElement: '::view-transition-new(root)' }
-          );
-          return;
-        }
-        // the screen collapses about the middle of the viewport, then the
-        // dot travels to the toggle (and the other way round for power on)
-        var mid = x + 'px 50%';
-        var dy = (y - innerHeight / 2).toFixed(1) + 'px';
-        if (goingDark) {
-          root.animate([
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1)', opacity: 1, borderRadius: '0px', offset: 0, easing: 'cubic-bezier(0.8, 0, 0.2, 1)' },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 0.004)', filter: 'brightness(3)', opacity: 1, borderRadius: '0px', offset: 0.4, easing: 'cubic-bezier(0.8, 0, 0.2, 1)' },
-            { transformOrigin: mid, transform: 'translateY(0) scale(0.012, 0.012)', filter: 'brightness(7)', opacity: 1, borderRadius: '50%', offset: 0.7, easing: 'cubic-bezier(0.6, 0, 0.4, 1)' },
-            { transformOrigin: mid, transform: 'translateY(' + dy + ') scale(0.012, 0.012)', filter: 'brightness(9)', opacity: 1, borderRadius: '50%', offset: 0.92 },
-            { transformOrigin: mid, transform: 'translateY(' + dy + ') scale(0, 0)', filter: 'brightness(9)', opacity: 0, borderRadius: '50%', offset: 1 }
-          ], { duration: 1300, fill: 'both', pseudoElement: '::view-transition-old(root)' });
-          // the dark page fades up behind it, like eyes adjusting
-          root.animate([
-            { transform: 'scale(1.06)', filter: 'brightness(0.1) blur(8px)' },
-            { transform: 'scale(1)', filter: 'brightness(1) blur(0px)' }
-          ], { duration: 1200, delay: 500, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'both', pseudoElement: '::view-transition-new(root)' });
-        } else {
-          // a dot leaves the toggle, shoots out into a line, opens into the page and flickers on
-          root.animate([
-            { transformOrigin: mid, transform: 'translateY(' + dy + ') scale(0, 0)', filter: 'brightness(9)', opacity: 0, borderRadius: '50%', offset: 0 },
-            { transformOrigin: mid, transform: 'translateY(' + dy + ') scale(0.012, 0.012)', filter: 'brightness(9)', opacity: 1, borderRadius: '50%', offset: 0.06, easing: 'cubic-bezier(0.6, 0, 0.4, 1)' },
-            { transformOrigin: mid, transform: 'translateY(0) scale(0.012, 0.012)', filter: 'brightness(8)', opacity: 1, borderRadius: '50%', offset: 0.2, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 0.004)', filter: 'brightness(5)', opacity: 1, borderRadius: '0px', offset: 0.42, easing: 'cubic-bezier(0.34, 1.25, 0.64, 1)' },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1.5)', opacity: 1, borderRadius: '0px', offset: 0.68 },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1)', opacity: 0.5, borderRadius: '0px', offset: 0.74 },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1.25)', opacity: 1, borderRadius: '0px', offset: 0.8 },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1)', opacity: 0.7, borderRadius: '0px', offset: 0.86 },
-            { transformOrigin: mid, transform: 'translateY(0) scale(1, 1)', filter: 'brightness(1)', opacity: 1, borderRadius: '0px', offset: 1 }
-          ], { duration: 1400, easing: 'linear', fill: 'both', pseudoElement: '::view-transition-new(root)' });
-          // the dark page dims and sinks away underneath
-          root.animate([
-            { transform: 'scale(1)', filter: 'brightness(1)' },
-            { transform: 'scale(0.92)', filter: 'brightness(0.2)' }
-          ], { duration: 700, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'both', pseudoElement: '::view-transition-old(root)' });
-        }
+        root.animate(
+          { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + end + 'px at ' + x + 'px ' + y + 'px)'] },
+          { duration: 420, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', pseudoElement: '::view-transition-new(root)' }
+        );
       }).catch(function () {});
-
-      var done = function () {
-        root.classList.remove('theme-vt', 'theme-off', 'theme-on');
-        themeBusy = false;
-        heroWave();
-      };
+      var done = function () { root.classList.remove('theme-vt'); };
       t.finished.then(done, done);
     });
   }
@@ -1246,7 +1169,7 @@
         root.classList.remove('has-3d');
         window.dispatchEvent(new Event('resize'));
       };
-      import('./hero3d.js?v=27').then(function (m) {
+      import('./hero3d.js?v=28').then(function (m) {
         m.start(stage, {
           mobile: !finePointer,
           onReady: function () { stage.classList.add('ready'); },

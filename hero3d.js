@@ -616,28 +616,14 @@ export function start(stage, options) {
   resize();
 
   // Theme: a lighter shadow on light paper, a deeper one on dark. In the
-  // dark the traces glow and the LEDs burn brighter. Flipping the theme
-  // is a power cycle: once the screen has switched, the board surges.
+  // dark the traces glow and the LEDs burn brighter.
   var ledBase = 0.12;
-  var wasDark = null;
   var paintTheme = function () {
     var dark = document.documentElement.getAttribute('data-theme') === 'dark';
     floorMat.opacity = dark ? 0.45 : 0.2;
     mats.copper.emissive.set(dark ? 0x7a2e0c : 0x000000);
     mats.copper.emissiveIntensity = dark ? 0.55 : 0;
     ledBase = dark ? 0.4 : 0.12;
-    if (wasDark !== null && wasDark !== dark) {
-      setTimeout(function () {
-        shake = 0.35;
-        var chip = partsById.chip;
-        parts.forEach(function (p) {
-          var dist = Math.hypot(p.x - chip.x, p.z - chip.z);
-          setTimeout(function () { jump(p, 0.6); }, dist * 40);
-        });
-        TRACES.forEach(function (tr, ti) { spawn(ti, 9, false); });
-      }, 1000);
-    }
-    wasDark = dark;
   };
   paintTheme();
   var mo = new MutationObserver(paintTheme);
