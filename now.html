@@ -14,8 +14,8 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Bertrand Osei-Owusu Bosu, computer engineering student at the University of Ghana">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="theme-color" content="#faf7f2" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#1b1815" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#faf8f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#171513" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232c4e72'/%3E%3Cg transform='translate(11 11) scale(0.42)' fill='%23faf7f2'%3E%3Cpath d='M12 8H32V92H12Z'/%3E%3Cpath d='M37 8H56A18.5 18.5 0 0 1 56 45H37Z'/%3E%3Cpath d='M37 50H60A21 21 0 0 1 60 92H37Z'/%3E%3C/g%3E%3C/svg%3E">
   <script>
     (function () {
@@ -27,8 +27,8 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=24">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=25">
 </head>
 <body>
   <header class="site-header">
@@ -38,67 +38,68 @@
         <a href="projects.html">Projects</a>
         <a href="journey.html">Journey</a>
         <a href="now.html" aria-current="page">Now</a>
-        <a class="ext" href="https://bertqrt.github.io/bertrandbosu-blog1/">Blog</a>
+        <a class="ext" href="https://bertqrt.github.io/bertrandbosu-blog1/">Blog<span aria-hidden="true">&#8599;</span></a>
       </nav>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light and dark mode">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
     </div>
+    <span class="scroll-progress" aria-hidden="true"></span>
   </header>
 
   <main class="wrap">
     <section class="page-intro">
       <a class="back-home" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Back to home</a>
-      <h1>Right now</h1>
+      <h1 class="split-words">Learning CSS, writing, and improving my study bot</h1>
       <p>A snapshot of this month. If you're reading this much later, some of it has probably changed.</p>
     </section>
 
     <div class="now-grid">
       <div>
         <ul class="log">
-          <li><span class="mono">Learning</span><div><strong>HTML and CSS</strong><p>Getting the fundamentals down. React is next.</p></div></li>
-          <li><span class="mono">Writing</span><div><strong>The blog</strong><p>Posts on building, learning and figuring things out. The latest is <a href="https://bertqrt.github.io/bertrandbosu-blog1/writing/the-fear-of-starting/">The fear of starting</a>.</p></div></li>
-          <li><span class="mono">Building</span><div><strong>A better study bot</strong><p>Improving how my Telegram bot finds the right part of a lecture before it answers.</p></div></li>
+          <li><span class="log-kind">Learning</span><div><strong>HTML and CSS</strong><p>Getting the fundamentals down. React is next.</p></div></li>
+          <li><span class="log-kind">Writing</span><div><strong>The blog</strong><p>Posts on building, learning and figuring things out. The latest is <a href="https://bertqrt.github.io/bertrandbosu-blog1/writing/the-fear-of-starting/">The fear of starting</a>.</p></div></li>
+          <li><span class="log-kind">Building</span><div><strong>A better study bot</strong><p>Improving how my Telegram bot finds the right part of a lecture before it answers.</p></div></li>
         </ul>
-        <span class="mono updated">Updated October 2026</span>
+        <span class="updated">Updated October 2026</span>
       </div>
 
       <aside class="toolbox" aria-label="Toolbox">
-        <h3>Boards</h3>
+        <h2>Boards</h2>
         <p>ESP32, Arduino, Raspberry Pi Zero 2W</p>
-        <h3>Code</h3>
+        <h2>Code</h2>
         <p>Python, C++ for Arduino, MATLAB, HTML and CSS</p>
-        <h3>Tools</h3>
+        <h2>Tools</h2>
         <p>Proteus, Excel, Git and GitHub Pages, Jekyll</p>
-        <h3>Off the bench</h3>
+        <h2>Off the bench</h2>
         <p>Course rep for Level 200 Computer Engineering</p>
       </aside>
     </div>
   </main>
 
   <footer class="site-footer" id="contact">
+    <div class="clock-wave" aria-hidden="true"></div>
     <div class="wrap footer-inner">
-      <p class="footer-big">Got a project, or a circuit that won't behave?</p>
-      <div class="contact-icons">
-        <a class="contact-icon email-link" href="#" data-user="bertrandoseiowusu22" data-domain="gmail.com" aria-label="Email me" title="Email">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-        </a>
-        <a class="contact-icon" href="https://www.linkedin.com/in/bertbnk/" aria-label="LinkedIn" title="LinkedIn">
-          <svg viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M100.28 448H7.4V148.9h92.88zm-46.44-338.5C24.09 109.5 0 85.4 0 55.9 0 25.4 24.1 1 53.84 1c29.7 0 53.84 24.4 53.84 54.9 0 29.5-24.14 53.6-53.84 53.6zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"/></svg>
-        </a>
+      <p class="footer-big split-words">Got a project, or a circuit that won't behave?</p>
+      <div class="footer-actions">
+        <a class="btn btn-primary magnetic email-link" href="#" data-user="bertrandoseiowusu22" data-domain="gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg><span class="btn-label">Email me</span></a>
+        <a class="btn btn-ghost magnetic" href="https://www.linkedin.com/in/bertbnk/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><span class="btn-label">LinkedIn</span></a>
       </div>
       <div class="footer-bottom">
         <span>Bertrand Osei-Owusu Bosu, Accra</span>
-        <span class="fine-print">Built with AI assistance</span>
+        <span>Built with AI assistance</span>
       </div>
     </div>
   </footer>
 
+  <div class="toast" role="status" aria-live="polite"></div>
+
   <button id="back-to-top" class="back-to-top" type="button" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+    <svg class="ring" viewBox="0 0 50 50" aria-hidden="true"><circle cx="25" cy="25" r="24"/></svg>
+    <svg class="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
-  <script src="script.js?v=24"></script>
+  <script src="script.js?v=25"></script>
 </body>
 </html>
