@@ -14,7 +14,7 @@ The rest lives in `script.js`, with keyframes at the end of `style.css`:
 
 - "Hi, I'm Bert." and the footer line drop in letter by letter, and the letters hop when you touch them.
 - Other headlines rise word by word and lean with the speed of your scroll; blocks flip up as they arrive.
-- On computers with a mouse, the normal pointer is replaced by a copper dot that sits exactly on the mouse and a ring that trails it (the normal pointer comes back in fullscreen video). Every click throws copper sparks.
+- Whenever a mouse or touchpad is used, the normal pointer is replaced by a copper dot that sits exactly on the mouse and a ring that trails it (it snaps instead of trailing with reduced motion). The normal pointer comes back in fullscreen video, when the mouse leaves the page, and on touch. Every click throws copper sparks.
 - A two-row marquee races faster, and flips direction, as you scroll.
 - The Latest build card plays an example `/study` chat while it is on screen.
 - Project filters throw cards off screen and bounce the new ones in; parts lists decode in.
