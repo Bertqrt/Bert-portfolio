@@ -8,18 +8,20 @@ The design follows a circuit board idea, kept quiet: copper traces, a chip, data
 
 ## Motion
 
-Most of the motion lives in `script.js`, with its keyframes at the end of `style.css`:
+The home page hero is a 3D circuit board you can play with (`hero3d.js`, built on three.js 0.160 loaded from jsDelivr). Parts drop onto the board with squash and stretch, current flows along the copper traces and lights the LEDs, clicking a part makes it jump, and clicking the chip or the button sends a shockwave through the whole board. Drag to spin it; scroll away and it comes apart into an exploded view. If WebGL or the download fails, the flat hero with the photo comes back.
 
-- Headlines rise word by word; blocks fade up as you scroll to them.
-- Faint PCB traces behind the home hero carry pulses of current, and glow copper around the cursor.
-- The photo tilts toward the cursor; buttons marked `magnetic` lean toward it.
+The rest lives in `script.js`, with keyframes at the end of `style.css`:
+
+- "Hi, I'm Bert." and the footer line drop in letter by letter, and the letters hop when you touch them.
+- Other headlines rise word by word and lean with the speed of your scroll; blocks flip up as they arrive.
+- A copper ring follows the cursor, and every click throws copper sparks.
+- A two-row marquee races faster, and flips direction, as you scroll.
 - The Latest build card plays an example `/study` chat while it is on screen.
-- Project filters slide a pill to the chosen filter and reflow the list; parts lists decode in.
-- A spark rides the front of the Journey trace.
-- Pages change with a curtain transition, and the theme switch spreads out in a circle.
-- The header line and the back-to-top ring show how far down the page you are.
+- Project filters throw cards off screen and bounce the new ones in; parts lists decode in.
+- A spark with a tail rides the front of the Journey trace.
+- Pages change with a tilted curtain transition, the theme switch spreads out in a circle, and back-to-top launches like a rocket.
 
-All of it is off when the visitor's device asks for reduced motion. Low-memory phones and data savers skip the heaviest parts (the scroll reveals, the cursor glow, the magnetic buttons and the flowing current).
+All of it is off when the visitor's device asks for reduced motion. Low-memory phones and data savers get the calm version (no 3D, no cursor effects, no marquee).
 
 ## Pages
 

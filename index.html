@@ -28,7 +28,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=25">
+  <link rel="stylesheet" href="style.css?v=26">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 <body>
   <header class="site-header">
@@ -45,12 +53,15 @@
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
       </button>
     </div>
-    <span class="scroll-progress" aria-hidden="true"></span>
   </header>
 
   <main class="wrap">
     <section class="hero">
       <div class="hero-circuit" aria-hidden="true"></div>
+      <div class="hero-stage" role="img" aria-label="A 3D circuit board you can play with: a chip, resistors, capacitors, LEDs and my photo taped to it. Click a part to make it jump.">
+        <p class="stage-loading" aria-hidden="true"><span class="stage-loading-chip"></span>Powering up the board</p>
+        <p class="stage-hint" aria-hidden="true">Click the parts. Drag to spin.</p>
+      </div>
       <div class="hero-text">
         <h1 class="split-words">Hi, I'm <span class="accent">Bert.</span></h1>
         <p class="lede">I study computer engineering at the University of Ghana and spend way too much time messing with embedded systems.</p>
@@ -83,6 +94,11 @@
         </ol>
       </div>
     </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-row"><span>Embedded systems</span><i></i><span>Applied AI</span><i></i><span>Computer engineering</span><i></i><span>University of Ghana</span><i></i></div>
+      <div class="marquee-row marquee-alt"><span>ESP32</span><i></i><span>Arduino</span><i></i><span>Raspberry Pi</span><i></i><span>Python</span><i></i><span>RAG</span><i></i><span>Telegram bots</span><i></i></div>
+    </div>
 
     <section class="split">
       <article class="feature">
@@ -119,7 +135,6 @@
   </main>
 
   <footer class="site-footer" id="contact">
-    <div class="clock-wave" aria-hidden="true"></div>
     <div class="wrap footer-inner">
       <p class="footer-big split-words">Got a project, or a circuit that won't behave?</p>
       <div class="footer-actions">
@@ -140,6 +155,6 @@
     <svg class="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
-  <script src="script.js?v=25"></script>
+  <script src="script.js?v=26"></script>
 </body>
 </html>
