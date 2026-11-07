@@ -19,7 +19,8 @@ The rest lives in `script.js`, with keyframes at the end of `style.css`:
 - The Latest build card plays an example `/study` chat while it is on screen.
 - Project filters throw cards off screen and bounce the new ones in; parts lists decode in.
 - A spark with a tail rides the front of the Journey trace.
-- Pages change with a tilted curtain transition, the theme switch spreads out in a circle, and back-to-top launches like a rocket.
+- Pages change with a tilted curtain transition, and back-to-top launches like a rocket.
+- The theme switch is an old CRT power switch: going dark, the page collapses into a glowing line, then a dot that flies into the toggle; going light, a dot shoots out of the toggle, opens into the page and flickers on. The hero letters hop in a wave afterwards, and the 3D board surges (its traces glow in the dark). Browsers without view transitions get a smooth colour fade.
 
 All of it is off when the visitor's device asks for reduced motion. Low-memory phones and data savers get the calm version (no 3D, no cursor effects, no marquee).
 

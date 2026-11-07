@@ -615,10 +615,29 @@ export function start(stage, options) {
   ro.observe(stage);
   resize();
 
-  // Theme: a lighter shadow on light paper, a deeper one on dark
+  // Theme: a lighter shadow on light paper, a deeper one on dark. In the
+  // dark the traces glow and the LEDs burn brighter. Flipping the theme
+  // is a power cycle: once the screen has switched, the board surges.
+  var ledBase = 0.12;
+  var wasDark = null;
   var paintTheme = function () {
     var dark = document.documentElement.getAttribute('data-theme') === 'dark';
     floorMat.opacity = dark ? 0.45 : 0.2;
+    mats.copper.emissive.set(dark ? 0x7a2e0c : 0x000000);
+    mats.copper.emissiveIntensity = dark ? 0.55 : 0;
+    ledBase = dark ? 0.4 : 0.12;
+    if (wasDark !== null && wasDark !== dark) {
+      setTimeout(function () {
+        shake = 0.35;
+        var chip = partsById.chip;
+        parts.forEach(function (p) {
+          var dist = Math.hypot(p.x - chip.x, p.z - chip.z);
+          setTimeout(function () { jump(p, 0.6); }, dist * 40);
+        });
+        TRACES.forEach(function (tr, ti) { spawn(ti, 9, false); });
+      }, 1000);
+    }
+    wasDark = dark;
   };
   paintTheme();
   var mo = new MutationObserver(paintTheme);
@@ -769,7 +788,7 @@ export function start(stage, options) {
     leds.forEach(function (l) {
       var s = l.led;
       s.level *= Math.exp(-dt * 3.2);
-      var lv = 0.12 + s.level + Math.max(0, Math.sin(t * 2 + l.x)) * 0.08;
+      var lv = ledBase + s.level + Math.max(0, Math.sin(t * 2 + l.x)) * 0.08;
       s.mat.emissiveIntensity = 0.2 + lv * 2.2;
       s.glow.material.opacity = Math.min(1, lv * 0.75);
       s.glow.scale.setScalar(1.6 + lv * 1.2);
