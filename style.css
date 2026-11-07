@@ -2290,37 +2290,6 @@ html.has-3d .hero-stage {
 
 .hero-stage.ready .stage-loading { opacity: 0; }
 
-.stage-hint {
-  position: absolute;
-  right: max(var(--gutter), calc(50vw - var(--max) / 2 + var(--gutter)));
-  bottom: 5.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 999px;
-  background: var(--paper-2);
-  color: var(--ink-soft);
-  font-size: var(--fs-small);
-  font-weight: 500;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease, transform 0.6s var(--ease-spring);
-  pointer-events: none;
-}
-
-.stage-hint::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--copper);
-  animation: blink 1.4s ease-in-out infinite;
-}
-
-.hero-stage.ready .stage-hint { opacity: 1; transform: none; transition-delay: 2.6s; }
-.hero-stage.played .stage-hint { opacity: 0; transform: translateY(10px); transition-delay: 0s; }
-
 @media (max-width: 720px) {
   html.has-3d .hero {
     grid-template-columns: minmax(0, 1fr);
@@ -2336,8 +2305,6 @@ html.has-3d .hero-stage {
     height: 96vw;
     margin: 0.5rem calc(-1 * var(--gutter)) 0;
   }
-  .stage-hint { right: 50%; transform: translate(50%, 10px); bottom: 0.5rem; }
-  .hero-stage.ready .stage-hint { transform: translate(50%, 0); }
 }
 
 /* ---------- Letters that drop in and hop when you touch them ---------- */

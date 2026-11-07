@@ -1163,13 +1163,11 @@
     })();
     if (canGL) {
       root.classList.add('has-3d');
-      var hint = stage.querySelector('.stage-hint');
-      if (hint && !finePointer) hint.textContent = 'Tap the parts. Swipe sideways to spin.';
       var fallback = function () {
         root.classList.remove('has-3d');
         window.dispatchEvent(new Event('resize'));
       };
-      import('./hero3d.js?v=30').then(function (m) {
+      import('./hero3d.js?v=31').then(function (m) {
         m.start(stage, {
           mobile: !finePointer,
           onReady: function () { stage.classList.add('ready'); },
