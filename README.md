@@ -10,6 +10,8 @@ The design follows a circuit board idea, kept quiet: copper traces, a chip, data
 
 The home page hero is a 3D circuit board you can play with (`hero3d.js`, built on three.js 0.160 loaded from jsDelivr). Parts drop onto the board with squash and stretch, current flows along the copper traces and lights the LEDs, clicking a part makes it jump, and clicking the chip or the button sends a shockwave through the whole board. Drag to spin it; scroll away and it comes apart into an exploded view. If WebGL or the download fails, the flat hero with the photo comes back.
 
+The first page of a visit opens with a short loader (about 1.4 seconds): the three pieces of the B fly in and lock together, copper fills it while a counter runs to 100, and the screen lifts away like a curtain as the page's own entrances start. It runs on CSS alone, so it finishes even if `script.js` fails to load. It doesn't replay when you move between pages, and it's skipped with reduced motion.
+
 The rest lives in `script.js`, with keyframes at the end of `style.css`:
 
 - "Hi, I'm Bert." and the footer line drop in letter by letter, and the letters hop when you touch them.

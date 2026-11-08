@@ -17,6 +17,35 @@
 
   var hasIO = 'IntersectionObserver' in window;
 
+  // ---------- The loader (first page of a visit only) ----------
+  // The inline script in <head> adds .booting; the loader runs on CSS alone,
+  // so it can never get stuck. Here we hold the page's own entrances until
+  // the curtain starts lifting (the start of its lift animation), and remove
+  // it once it has lifted. The timers are only a backup.
+  var BOOT_MS = root.classList.contains('booting') ? 950 : 0;
+  var bootWaiters = [];
+  var whenBooted = function (fn) { if (!root.classList.contains('booting')) fn(); else bootWaiters.push(fn); };
+  if (BOOT_MS) {
+    var bootEl = document.querySelector('.boot');
+    var unhold = function () {
+      if (!root.classList.contains('booting')) return;
+      root.classList.remove('booting');
+      bootWaiters.forEach(function (fn) { fn(); });
+      bootWaiters = [];
+    };
+    var finish = function () {
+      unhold();
+      if (bootEl && bootEl.parentNode) bootEl.remove();
+      root.classList.remove('boot-on');
+    };
+    if (bootEl) {
+      bootEl.addEventListener('animationstart', function (e) { if (e.animationName === 'boot-lift') unhold(); });
+      bootEl.addEventListener('animationend', function (e) { if (e.animationName === 'boot-lift') finish(); });
+    }
+    setTimeout(unhold, 2500);
+    setTimeout(finish, 4000);
+  }
+
   // Runs fn at most once per frame while the page scrolls
   var onScrollFrame = function (fn) {
     var ticking = false;
@@ -269,7 +298,7 @@
     splits.forEach(function (el) {
       // the hero greets you straight away; the rest wait to be scrolled to
       if (el.closest('.hero') || el.closest('.page-intro')) {
-        requestAnimationFrame(function () { setTimeout(function () { el.classList.add('in'); }, 120); });
+        whenBooted(function () { setTimeout(function () { el.classList.add('in'); }, 120); });
       } else {
         splitIo.observe(el);
       }
@@ -344,7 +373,9 @@
       else endIo.disconnect();
     });
 
-    toReveal.forEach(function (el) { revealIo.observe(el); });
+    whenBooted(function () {
+      toReveal.forEach(function (el) { revealIo.observe(el); });
+    });
     endIo.observe(endMark);
   }
 
@@ -1167,12 +1198,13 @@
         root.classList.remove('has-3d');
         window.dispatchEvent(new Event('resize'));
       };
-      import('./hero3d.js?v=31').then(function (m) {
-        m.start(stage, {
+      import('./hero3d.js?v=32').then(function (m) {
+        // the parts start dropping as the curtain lifts
+        whenBooted(function () { m.start(stage, {
           mobile: !finePointer,
           onReady: function () { stage.classList.add('ready'); },
           onPlay: function () { stage.classList.add('played'); }
-        });
+        }); });
       }).catch(fallback);
     }
   }

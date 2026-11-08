@@ -25,12 +25,31 @@
       document.documentElement.setAttribute('data-theme', theme);
     })();
   </script>
+  <script>
+    // The loader plays once per visit: the first page you open, not every page after
+    try {
+      if (!sessionStorage.getItem('booted') && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('booting', 'boot-on');
+        sessionStorage.setItem('booted', '1');
+      }
+    } catch (e) {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=31">
+  <link rel="stylesheet" href="style.css?v=32">
 </head>
 <body>
+  <div class="boot" aria-hidden="true">
+    <svg class="boot-mark" viewBox="0 0 100 100">
+      <defs><clipPath id="boot-clip"><path d="M12 8H32V92H12Z"/><path d="M37 8H56A18.5 18.5 0 0 1 56 45H37Z"/><path d="M37 50H60A21 21 0 0 1 60 92H37Z"/></clipPath></defs>
+      <path class="boot-b boot-b1" d="M12 8H32V92H12Z"/>
+      <path class="boot-b boot-b2" d="M37 8H56A18.5 18.5 0 0 1 56 45H37Z"/>
+      <path class="boot-b boot-b3" d="M37 50H60A21 21 0 0 1 60 92H37Z"/>
+      <g clip-path="url(#boot-clip)"><rect class="boot-fill" x="0" y="0" width="100" height="100"/></g>
+    </svg>
+    <span class="boot-count"></span>
+  </div>
   <header class="site-header">
     <div class="wrap header-inner">
       <a class="home-link" href="index.html" aria-label="Bertrand Osei-Owusu Bosu, home"><svg class="mark" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="M12 8H32V92H12Z"/><path d="M37 8H56A18.5 18.5 0 0 1 56 45H37Z"/><path d="M37 50H60A21 21 0 0 1 60 92H37Z"/></svg><span class="name">Bertrand Osei-Owusu Bosu</span></a>
@@ -131,6 +150,6 @@
     <svg class="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
   </button>
 
-  <script src="script.js?v=31"></script>
+  <script src="script.js?v=32"></script>
 </body>
 </html>
